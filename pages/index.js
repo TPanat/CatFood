@@ -1,36 +1,29 @@
 // pages/index.js
 import Head from 'next/head';
+import { useState, useMemo } from 'react'; // Import hooks ที่จำเป็น
 import { catFoodData } from '../data/catFoodData';
-// Import สไตล์ใหม่
-import styles from '../styles/Home.module.css'; 
+import styles from '../styles/Home.module.css';
 
-// ฟังก์ชัน helper เพื่อจัดรูปแบบชื่อโภชนาการให้ดูดีขึ้น
+// ... (FoodCard Component โค้ดเดิม) ...
+// เพื่อให้โค้ดกระชับ ผมจะใส่เฉพาะส่วนที่เปลี่ยนไป
+// คุณสามารถคัดลอกส่วน FoodCard Component เดิมมาวางได้เลย
 const formatKey = (key) => {
-    // เช่น เปลี่ยน protein เป็น Protein
     return key.charAt(0).toUpperCase() + key.slice(1);
 };
 
-// Component สำหรับแสดง Card อาหารแต่ละยี่ห้อ
 const FoodCard = ({ food }) => {
     const cardClass = food.type === 'Dry' ? styles.dryType : styles.wetType;
-
+    // ปรับการแสดงผล: เพิ่ม Age ใน Card
     return (
         <div className={`${styles.foodCard} ${cardClass}`}>
-            
-            {/* ส่วนหัว Card: ชื่อและประเภท */}
             <div className={styles.cardHeader}>
                 <h2>{food.name}</h2>
-                <p>ประเภท: {food.type}</p>
+                <p>ประเภท: {food.type} | **อายุ: {food.age}**</p> 
             </div>
-
-            {/* ส่วนผสมหลัก */}
             <p style={{ fontSize: '0.9em', color: '#777' }}>
                 **ส่วนผสมหลัก:** {food.ingredients.slice(0, 3).join(', ')}{food.ingredients.length > 3 ? '...' : ''}
             </p>
-            
             <hr style={{ margin: '15px 0', borderTop: '1px solid #eee' }} />
-
-            {/* ส่วนเปรียบเทียบโภชนาการ */}
             <h3 style={{ fontSize: '1.1em', marginBottom: '10px', color: '#333' }}>
                 อัตราส่วนโภชนาการ
             </h3>
@@ -46,34 +39,86 @@ const FoodCard = ({ food }) => {
     );
 };
 
-
+// Component หลัก
 const Home = () => {
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>Cat Food Comparator</title>
-      </Head>
-      
-      {/* ส่วน Header หลัก */}
-      <h1 style={{ textAlign: 'center', color: '#333', marginBottom: '10px' }}>
-        😻 เปรียบเทียบอาหารแมว
-      </h1>
-      <p style={{ textAlign: 'center', color: '#666', fontSize: '1.1em' }}>
-        โภชนาการสำคัญ 5 ตัวเปรียบเทียบในรูปแบบ Card ดูง่าย
-      </p>
+    // 1. กำหนด State สำหรับ Filter
+    const [filterType, setFilterType] = useState('All'); // All, Dry, Wet
+    const [filterAge, setFilterAge] = useState('All');   // All, Kitten, Adult, Senior
+    
+    // ตัวเลือกสำหรับ Filter
+    const typeOptions = ['All', 'Dry', 'Wet'];
+    const ageOptions = ['All', 'Kitten', 'Adult', 'Senior'];
 
-      {/* ส่วน Grid แสดง Card อาหารทั้งหมด */}
-      <div className={styles.foodGrid}>
-        {catFoodData.map((food) => (
-          <FoodCard key={food.id} food={food} />
-        ))}
-      </div>
-      
-      <p style={{ marginTop: '30px', textAlign: 'center', fontSize: '0.8em', color: '#999' }}>
-        *ข้อมูลโภชนาการอ้างอิงจาก Guaranteed Analysis (โปรตีน, ไขมัน, ไฟเบอร์, ความชื้น, ทอรีน)
-      </p>
-    </div>
-  );
+    // 2. ใช้ useMemo เพื่อกรองข้อมูล
+    const filteredFood = useMemo(() => {
+        return catFoodData.filter(food => {
+            // กรองตามประเภท (Dry/Wet)
+            const typeMatch = filterType === 'All' || food.type === filterType;
+            
+            // กรองตามอายุ (Kitten/Adult/Senior)
+            const ageMatch = filterAge === 'All' || food.age === filterAge;
+            
+            return typeMatch && ageMatch;
+        });
+    }, [filterType, filterAge]); // จะ re-run เมื่อ filterType หรือ filterAge เปลี่ยน
+
+    return (
+        <div className={styles.container}>
+            <Head>
+                <title>Cat Food Comparator</title>
+            </Head>
+            
+            <h1 style={{ textAlign: 'center', color: '#333', marginBottom: '10px' }}>
+                😻 เปรียบเทียบอาหารแมว
+            </h1>
+            
+            {/* 3. ส่วนควบคุม Filter */}
+            <div className={styles.filterControls}>
+                
+                {/* Filter ประเภทอาหาร */}
+                <div className={styles.filterGroup}>
+                    <label>ประเภท:</label>
+                    <select 
+                        value={filterType} 
+                        onChange={(e) => setFilterType(e.target.value)}
+                        className={styles.filterSelect}
+                    >
+                        {typeOptions.map(option => (
+                            <option key={option} value={option}>{option}</option>
+                        ))}
+                    </select>
+                </div>
+
+                {/* Filter อายุแมว */}
+                <div className={styles.filterGroup}>
+                    <label>อายุแมว:</label>
+                    <select 
+                        value={filterAge} 
+                        onChange={(e) => setFilterAge(e.target.value)}
+                        className={styles.filterSelect}
+                    >
+                        {ageOptions.map(option => (
+                            <option key={option} value={option}>{option}</option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+
+            {/* ส่วน Grid แสดง Card อาหารที่ถูกกรอง */}
+            <div className={styles.foodGrid}>
+                {filteredFood.length > 0 ? (
+                    filteredFood.map((food) => (
+                        <FoodCard key={food.id} food={food} />
+                    ))
+                ) : (
+                    <p style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '50px', color: '#888' }}>
+                        ไม่พบข้อมูลอาหารตามเงื่อนไขที่เลือก
+                    </p>
+                )}
+            </div>
+            
+        </div>
+    );
 };
 
 export default Home;

@@ -80,3 +80,35 @@
   font-weight: bold;
   color: #007bff; /* เน้นสีฟ้าสำหรับตัวเลข */
 }
+
+/* --- Filter Styles --- */
+.filterControls {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 30px;
+  padding: 15px;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.filterGroup label {
+  font-weight: bold;
+  margin-right: 10px;
+  color: #333;
+}
+
+.filterSelect {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.filterSelect:focus {
+  border-color: #007bff;
+  outline: none;
+}
