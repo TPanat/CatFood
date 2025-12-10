@@ -25,6 +25,7 @@ const FoodCard = ({ food }) => {
                         src={food.imageUrl} 
                         alt={`รูปภาพ ${food.name}`} 
                         className={styles.foodImage} 
+                        loading="lazy"
                     />
                 </div>
             )}
