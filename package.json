@@ -1,6 +1,7 @@
 {
   "name": "cat-food-compare",
   "version": "0.1.0",
+  "homepage": "https://tpanat.github.io/CatFood/",
   "private": true,
   "scripts": {
     "dev": "next dev",
