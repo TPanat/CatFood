@@ -1,67 +1,79 @@
-// pages/index.js (หรือ pages/index.tsx)
+// pages/index.js
+import Head from 'next/head';
 import { catFoodData } from '../data/catFoodData';
+// Import สไตล์ใหม่
+import styles from '../styles/Home.module.css'; 
+
+// ฟังก์ชัน helper เพื่อจัดรูปแบบชื่อโภชนาการให้ดูดีขึ้น
+const formatKey = (key) => {
+    // เช่น เปลี่ยน protein เป็น Protein
+    return key.charAt(0).toUpperCase() + key.slice(1);
+};
+
+// Component สำหรับแสดง Card อาหารแต่ละยี่ห้อ
+const FoodCard = ({ food }) => {
+    const cardClass = food.type === 'Dry' ? styles.dryType : styles.wetType;
+
+    return (
+        <div className={`${styles.foodCard} ${cardClass}`}>
+            
+            {/* ส่วนหัว Card: ชื่อและประเภท */}
+            <div className={styles.cardHeader}>
+                <h2>{food.name}</h2>
+                <p>ประเภท: {food.type}</p>
+            </div>
+
+            {/* ส่วนผสมหลัก */}
+            <p style={{ fontSize: '0.9em', color: '#777' }}>
+                **ส่วนผสมหลัก:** {food.ingredients.slice(0, 3).join(', ')}{food.ingredients.length > 3 ? '...' : ''}
+            </p>
+            
+            <hr style={{ margin: '15px 0', borderTop: '1px solid #eee' }} />
+
+            {/* ส่วนเปรียบเทียบโภชนาการ */}
+            <h3 style={{ fontSize: '1.1em', marginBottom: '10px', color: '#333' }}>
+                อัตราส่วนโภชนาการ
+            </h3>
+            <ul className={styles.nutritionList}>
+                {Object.entries(food.nutrition).map(([key, value]) => (
+                    <li key={key} className={styles.nutritionItem}>
+                        <span>{formatKey(key)}</span>
+                        <span>{value}</span>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+};
+
 
 const Home = () => {
-  // หัวข้อโภชนาการที่ต้องการเปรียบเทียบ
-  const nutritionKeys = ['protein', 'fat', 'fiber', 'moisture', 'taurine'];
-
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>🐱 ตารางเปรียบเทียบอาหารแมว (แห้ง vs. เปียก)</h1>
-      <p>ข้อมูลส่วนผสมและอัตราส่วนโภชนาการ</p>
+    <div className={styles.container}>
+      <Head>
+        <title>Cat Food Comparator</title>
+      </Head>
       
-      {/* ตารางเปรียบเทียบหลัก */}
-      <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
-        <thead>
-          <tr style={{ backgroundColor: '#f2f2f2' }}>
-            <th style={styles.th}>รายละเอียด</th>
-            {catFoodData.map((food) => (
-              <th key={food.id} style={styles.th}>
-                {food.name} ({food.type})
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {/* แถวส่วนผสม */}
-          <tr>
-            <td style={styles.tdTitle}>**ส่วนผสมหลัก**</td>
-            {catFoodData.map((food) => (
-              <td key={food.id} style={styles.td}>
-                {food.ingredients.join(', ')}
-              </td>
-            ))}
-          </tr>
-          
-          {/* แถวข้อมูลโภชนาการ */}
-          <tr style={{ backgroundColor: '#e6f7ff' }}>
-            <td colSpan={catFoodData.length + 1} style={styles.tdHeader}>
-              **อัตราส่วนโภชนาการ (Guaranteed Analysis)**
-            </td>
-          </tr>
-          
-          {nutritionKeys.map((key) => (
-            <tr key={key}>
-              <td style={styles.tdTitle}>{key.charAt(0).toUpperCase() + key.slice(1)}</td>
-              {catFoodData.map((food) => (
-                <td key={food.id} style={styles.td}>
-                  {food.nutrition[key]}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {/* ส่วน Header หลัก */}
+      <h1 style={{ textAlign: 'center', color: '#333', marginBottom: '10px' }}>
+        😻 เปรียบเทียบอาหารแมว
+      </h1>
+      <p style={{ textAlign: 'center', color: '#666', fontSize: '1.1em' }}>
+        โภชนาการสำคัญ 5 ตัวเปรียบเทียบในรูปแบบ Card ดูง่าย
+      </p>
+
+      {/* ส่วน Grid แสดง Card อาหารทั้งหมด */}
+      <div className={styles.foodGrid}>
+        {catFoodData.map((food) => (
+          <FoodCard key={food.id} food={food} />
+        ))}
+      </div>
+      
+      <p style={{ marginTop: '30px', textAlign: 'center', fontSize: '0.8em', color: '#999' }}>
+        *ข้อมูลโภชนาการอ้างอิงจาก Guaranteed Analysis (โปรตีน, ไขมัน, ไฟเบอร์, ความชื้น, ทอรีน)
+      </p>
     </div>
   );
 };
 
 export default Home;
-
-// สไตล์แบบง่ายๆ (สามารถย้ายไปที่ไฟล์ CSS เช่น styles/globals.css ได้)
-const styles = {
-  th: { border: '1px solid #ddd', padding: '10px', textAlign: 'left', backgroundColor: '#add8e6' },
-  td: { border: '1px solid #ddd', padding: '10px', verticalAlign: 'top' },
-  tdTitle: { border: '1px solid #ddd', padding: '10px', fontWeight: 'bold', backgroundColor: '#f9f9f9' },
-  tdHeader: { border: '1px solid #ddd', padding: '10px', textAlign: 'center', fontWeight: 'bold', backgroundColor: '#ccedff' },
-};

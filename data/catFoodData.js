@@ -27,5 +27,18 @@ export const catFoodData = [
       taurine: '0.15%',
     },
   },
+  {
+    id: 3,
+    name: 'ยี่ห้อ C (แห้ง)',
+    type: 'Dry',
+    ingredients: ['เนื้อปลา', 'ข้าวกล้อง', 'วิตามินรวม', 'แร่ธาตุ'],
+    nutrition: {
+      protein: '35%',
+      fat: '15%',
+      fiber: '4%',
+      moisture: '10%',
+      taurine: '0.2%',
+    },
+  },
   // เพิ่มอาหารยี่ห้ออื่นๆ ได้ที่นี่...
 ];
