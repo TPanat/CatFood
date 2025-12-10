@@ -4,32 +4,28 @@ import { useState, useMemo } from 'react'; // Import hooks ที่จำเป
 import { catFoodData } from '../data/catFoodData';
 import styles from '../styles/Home.module.css';
 
+
 // --- FoodCard Component (ส่วนที่แก้ไข) ---
 const FoodCard = ({ food }) => {
+    
+    // ประกาศฟังก์ชัน formatKey ภายใน FoodCard
+    const formatKey = (key) => {
+        return key.charAt(0).toUpperCase() + key.slice(1);
+    };
+
     const cardClass = food.type === 'Dry' ? styles.dryType : styles.wetType;
 
     return (
         <div className={`${styles.foodCard} ${cardClass}`}>
             
-            {/* เพิ่มรูปภาพผลิตภัณฑ์ */}
-            {food.imageUrl && ( // ตรวจสอบว่ามี imageUrl ถึงจะแสดงรูป
-                <div className={styles.foodImageContainer}>
-                    <img 
-                        src={food.imageUrl} 
-                        alt={`รูปภาพ ${food.name}`} 
-                        className={styles.foodImage} 
-                    />
-                </div>
-            )}
-            
+            {/* ... (โค้ดแสดงรูปภาพ) ... */}
+
             <div className={styles.cardHeader}>
                 <h2>{food.name}</h2>
                 <p>ประเภท: {food.type} | อายุ: {food.age}</p> 
             </div>
-
-            <p style={{ fontSize: '0.9em', color: '#777' }}>
-                **ส่วนผสมหลัก:** {food.ingredients.slice(0, 3).join(', ')}{food.ingredients.length > 3 ? '...' : ''}
-            </p>
+            
+            {/* ... (โค้ดแสดงส่วนผสม) ... */}
             
             <hr style={{ margin: '15px 0', borderTop: '1px solid #eee' }} />
 
@@ -37,6 +33,7 @@ const FoodCard = ({ food }) => {
                 อัตราส่วนโภชนาการ
             </h3>
             <ul className={styles.nutritionList}>
+                {/* ที่นี่เรียกใช้ formatKey ที่ถูกประกาศด้านบน */}
                 {Object.entries(food.nutrition).map(([key, value]) => (
                     <li key={key} className={styles.nutritionItem}>
                         <span>{formatKey(key)}</span>
