@@ -19,6 +19,15 @@ const FoodCard = ({ food }) => {
         <div className={`${styles.foodCard} ${cardClass}`}>
             
             {/* ... (โค้ดแสดงรูปภาพ) ... */}
+            {food.imageUrl && ( // ตรวจสอบว่ามี imageUrl ถึงจะแสดงรูป
+                <div className={styles.foodImageContainer}>
+                    <img 
+                        src={food.imageUrl} 
+                        alt={`รูปภาพ ${food.name}`} 
+                        className={styles.foodImage} 
+                    />
+                </div>
+            )}
 
             <div className={styles.cardHeader}>
                 <h2>{food.name}</h2>
