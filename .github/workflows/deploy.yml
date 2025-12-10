@@ -1,0 +1,54 @@
+# .github/workflows/deploy.yml
+name: Deploy Next.js to GitHub Pages
+
+on:
+  # รัน Workflow เมื่อมีการ Push ไปยัง branch main
+  push:
+    branches: ["main"]
+
+  # อนุญาตให้รัน Workflow ด้วยมือจากแท็บ Actions ได้
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    # ใช้ Ubuntu ล่าสุด
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout โค้ด
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. ตั้งค่า Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      # 3. ติดตั้ง Dependencies และ Build Next.js
+      - name: Install dependencies and Build
+        run: |
+          npm install
+          npm run build
+
+      # 4. ตั้งค่า GitHub Pages Environment
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      # 5. อัปโหลดไฟล์ Build Output (โฟลเดอร์ out)
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Next.js Static Build Output จะอยู่ในโฟลเดอร์ 'out'
+          path: './out'
+
+      # 6. Deploy ไปยัง GitHub Pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
