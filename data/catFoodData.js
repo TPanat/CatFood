@@ -7,7 +7,7 @@ export const catFoodData = [
     brand: 'Kaniva',
     type: 'Wet',
     age: 'Kitten', // เพิ่มข้อมูลอายุ
-    imageUrl: '/images/Kaniva_wet_Tuna&Shrimp_gravy.png', // Path สัมพัทธ์จาก public
+    imageUrl: '/images/kaniva_wet_tunashrimp_gravy.png', // Path สัมพัทธ์จาก public
     ingredients: ['เนื้อไก่', 'ข้าวกล้อง', 'วิตามินรวม', 'แร่ธาตุ'],
     nutrition: {
       protein: '32%',
