@@ -83,32 +83,61 @@
 
 /* --- Filter Styles --- */
 .filterControls {
+  /* ใช้ Flexbox เพื่อจัดเรียง Group Filter และให้มันอยู่ตรงกลาง */
   display: flex;
+  flex-wrap: wrap; /* ให้หักบรรทัดในจอมือถือ */
   gap: 20px;
   justify-content: center;
   margin-bottom: 30px;
   padding: 15px;
-  border: 1px solid #f0f0f0;
-  border-radius: 8px;
-  background-color: #f9f9f9;
+  border-radius: 12px; /* โค้งมนมากขึ้น */
+  background-color: #f0f4f8; /* สีพื้นหลังอ่อนๆ */
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .filterGroup label {
   font-weight: bold;
-  margin-right: 10px;
+  margin-bottom: 8px;
   color: #333;
 }
 
-.filterSelect {
-  padding: 8px 12px;
+.buttonGroup {
+  display: flex;
+  /* ทำให้กลุ่มปุ่มโค้งมนเป็น Pill */
   border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1em;
-  cursor: pointer;
-  transition: border-color 0.2s;
+  border-radius: 20px; 
+  overflow: hidden; /* ซ่อนขอบที่ไม่ต้องการเมื่อปุ่มติดกัน */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.filterSelect:focus {
-  border-color: #007bff;
-  outline: none;
+.filterButton {
+  padding: 8px 15px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 0.9em;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  color: #666;
+}
+
+.filterButton:hover:not(.active) {
+  background-color: #e6e6e6;
+}
+
+.filterButton.active {
+  /* สไตล์ของปุ่มที่ถูกเลือก */
+  background-color: #007bff; /* สีหลัก */
+  color: white;
+  font-weight: bold;
+}
+
+/* ลบตัวเลือก Select เดิมทิ้ง */
+.filterSelect {
+    display: none;
 }

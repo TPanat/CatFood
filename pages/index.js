@@ -41,26 +41,23 @@ const FoodCard = ({ food }) => {
 
 // Component หลัก
 const Home = () => {
-    // 1. กำหนด State สำหรับ Filter
+    // 1. กำหนด State สำหรับ Filter (เหมือนเดิม)
     const [filterType, setFilterType] = useState('All'); // All, Dry, Wet
     const [filterAge, setFilterAge] = useState('All');   // All, Kitten, Adult, Senior
     
-    // ตัวเลือกสำหรับ Filter
+    // ตัวเลือกสำหรับ Filter (เหมือนเดิม)
     const typeOptions = ['All', 'Dry', 'Wet'];
     const ageOptions = ['All', 'Kitten', 'Adult', 'Senior'];
 
-    // 2. ใช้ useMemo เพื่อกรองข้อมูล
+    // 2. ใช้ useMemo เพื่อกรองข้อมูล (เหมือนเดิม)
     const filteredFood = useMemo(() => {
+        // ... (โค้ดการกรองเหมือนเดิม) ...
         return catFoodData.filter(food => {
-            // กรองตามประเภท (Dry/Wet)
             const typeMatch = filterType === 'All' || food.type === filterType;
-            
-            // กรองตามอายุ (Kitten/Adult/Senior)
             const ageMatch = filterAge === 'All' || food.age === filterAge;
-            
             return typeMatch && ageMatch;
         });
-    }, [filterType, filterAge]); // จะ re-run เมื่อ filterType หรือ filterAge เปลี่ยน
+    }, [filterType, filterAge]); 
 
     return (
         <div className={styles.container}>
@@ -72,39 +69,43 @@ const Home = () => {
                 😻 เปรียบเทียบอาหารแมว
             </h1>
             
-            {/* 3. ส่วนควบคุม Filter */}
+            {/* 3. ส่วนควบคุม Filter (รูปแบบใหม่: Buttons) */}
             <div className={styles.filterControls}>
                 
                 {/* Filter ประเภทอาหาร */}
                 <div className={styles.filterGroup}>
                     <label>ประเภท:</label>
-                    <select 
-                        value={filterType} 
-                        onChange={(e) => setFilterType(e.target.value)}
-                        className={styles.filterSelect}
-                    >
+                    <div className={styles.buttonGroup}>
                         {typeOptions.map(option => (
-                            <option key={option} value={option}>{option}</option>
+                            <button 
+                                key={option} 
+                                className={`${styles.filterButton} ${filterType === option ? styles.active : ''}`}
+                                onClick={() => setFilterType(option)}
+                            >
+                                {option}
+                            </button>
                         ))}
-                    </select>
+                    </div>
                 </div>
 
                 {/* Filter อายุแมว */}
                 <div className={styles.filterGroup}>
                     <label>อายุแมว:</label>
-                    <select 
-                        value={filterAge} 
-                        onChange={(e) => setFilterAge(e.target.value)}
-                        className={styles.filterSelect}
-                    >
+                    <div className={styles.buttonGroup}>
                         {ageOptions.map(option => (
-                            <option key={option} value={option}>{option}</option>
+                            <button 
+                                key={option} 
+                                className={`${styles.filterButton} ${filterAge === option ? styles.active : ''}`}
+                                onClick={() => setFilterAge(option)}
+                            >
+                                {option}
+                            </button>
                         ))}
-                    </select>
+                    </div>
                 </div>
             </div>
 
-            {/* ส่วน Grid แสดง Card อาหารที่ถูกกรอง */}
+            {/* ส่วน Grid แสดง Card อาหารที่ถูกกรอง (โค้ดเดิม) */}
             <div className={styles.foodGrid}>
                 {filteredFood.length > 0 ? (
                     filteredFood.map((food) => (
