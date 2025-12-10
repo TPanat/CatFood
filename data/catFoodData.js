@@ -3,9 +3,11 @@
 export const catFoodData = [
   {
     id: 1,
-    name: 'ยี่ห้อ A (แห้ง)',
-    type: 'Dry',
+    name: 'Kaniva Tuna & Shrimp in Gravy Pouch',
+    brand: 'Kaniva',
+    type: 'Wet',
     age: 'Kitten', // เพิ่มข้อมูลอายุ
+    imageUrl: '/images/Kaniva_wet_Tuna&Shrimp_gravy.png', // Path สัมพัทธ์จาก public
     ingredients: ['เนื้อไก่', 'ข้าวกล้อง', 'วิตามินรวม', 'แร่ธาตุ'],
     nutrition: {
       protein: '32%',
@@ -18,8 +20,10 @@ export const catFoodData = [
   {
     id: 2,
     name: 'ยี่ห้อ B (เปียก)',
+    brand: '',
     type: 'Wet',
     age: 'Adult', // เพิ่มข้อมูลอายุ
+    imageUrl: '', 
     ingredients: ['ปลาทูน่า', 'น้ำเกรวี่', 'น้ำมันปลา', 'ผักโขม'],
     nutrition: {
       protein: '10%',
@@ -32,8 +36,10 @@ export const catFoodData = [
   {
     id: 3,
     name: 'ยี่ห้อ C (แห้ง)',
+    brand: '',
     type: 'Dry',
     age: 'Adult', // อาหารแห้งสำหรับแมวโต
+    imageUrl: '', 
     ingredients: ['ปลาแซลมอน', 'มันฝรั่ง', 'แครอท'],
     nutrition: {
       protein: '30%',
@@ -46,8 +52,10 @@ export const catFoodData = [
   {
     id: 4,
     name: 'ยี่ห้อ D (เปียก)',
+    brand: '',
     type: 'Wet',
     age: 'Senior', // อาหารเปียกสำหรับแมวสูงวัย
+    imageUrl: '', 
     ingredients: ['ไก่บดละเอียด', 'น้ำสต็อก', 'กลูโคซามีน'],
     nutrition: {
       protein: '8%',

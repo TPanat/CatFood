@@ -4,26 +4,35 @@ import { useState, useMemo } from 'react'; // Import hooks ที่จำเป
 import { catFoodData } from '../data/catFoodData';
 import styles from '../styles/Home.module.css';
 
-// ... (FoodCard Component โค้ดเดิม) ...
-// เพื่อให้โค้ดกระชับ ผมจะใส่เฉพาะส่วนที่เปลี่ยนไป
-// คุณสามารถคัดลอกส่วน FoodCard Component เดิมมาวางได้เลย
-const formatKey = (key) => {
-    return key.charAt(0).toUpperCase() + key.slice(1);
-};
-
+// --- FoodCard Component (ส่วนที่แก้ไข) ---
 const FoodCard = ({ food }) => {
     const cardClass = food.type === 'Dry' ? styles.dryType : styles.wetType;
-    // ปรับการแสดงผล: เพิ่ม Age ใน Card
+
     return (
         <div className={`${styles.foodCard} ${cardClass}`}>
+            
+            {/* เพิ่มรูปภาพผลิตภัณฑ์ */}
+            {food.imageUrl && ( // ตรวจสอบว่ามี imageUrl ถึงจะแสดงรูป
+                <div className={styles.foodImageContainer}>
+                    <img 
+                        src={food.imageUrl} 
+                        alt={`รูปภาพ ${food.name}`} 
+                        className={styles.foodImage} 
+                    />
+                </div>
+            )}
+            
             <div className={styles.cardHeader}>
                 <h2>{food.name}</h2>
-                <p>ประเภท: {food.type} | **อายุ: {food.age}**</p> 
+                <p>ประเภท: {food.type} | อายุ: {food.age}</p> 
             </div>
+
             <p style={{ fontSize: '0.9em', color: '#777' }}>
                 **ส่วนผสมหลัก:** {food.ingredients.slice(0, 3).join(', ')}{food.ingredients.length > 3 ? '...' : ''}
             </p>
+            
             <hr style={{ margin: '15px 0', borderTop: '1px solid #eee' }} />
+
             <h3 style={{ fontSize: '1.1em', marginBottom: '10px', color: '#333' }}>
                 อัตราส่วนโภชนาการ
             </h3>
@@ -38,6 +47,7 @@ const FoodCard = ({ food }) => {
         </div>
     );
 };
+// --- สิ้นสุด FoodCard Component ---
 
 // Component หลัก
 const Home = () => {

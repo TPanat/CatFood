@@ -141,3 +141,18 @@
 .filterSelect {
     display: none;
 }
+
+/* --- Image Styles --- */
+.foodImageContainer {
+  text-align: center; /* จัดรูปภาพให้อยู่ตรงกลาง */
+  margin-bottom: 15px;
+}
+
+.foodImage {
+  max-width: 150px; /* จำกัดขนาดรูปภาพ */
+  height: auto;
+  border-radius: 8px; /* ทำให้ขอบรูปภาพมนเล็กน้อย */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #fff; /* ใส่พื้นหลังขาวหากรูปเป็น PNG โปร่งใส */
+  padding: 5px; /* เว้นขอบเล็กน้อย */
+}
