@@ -19,11 +19,11 @@ export const catFoodData = [
   },
   {
     id: 2,
-    name: 'ยี่ห้อ B (เปียก)',
-    brand: '',
+    name: 'Kaniva Wet Food Skin & Coat Salmon & Cod',
+    brand: 'Kaniva',
     type: 'Wet',
     age: 'Adult', // เพิ่มข้อมูลอายุ
-    imageUrl: '', 
+    imageUrl: '/images/kaniva_wet_skincoat_salmoncod_gravy.png', 
     ingredients: ['ปลาทูน่า', 'น้ำเกรวี่', 'น้ำมันปลา', 'ผักโขม'],
     nutrition: {
       protein: '10%',
