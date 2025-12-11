@@ -106,13 +106,21 @@
 }
 
 /* --- Summary Button Container --- */
-.summaryButtonContainer {
-    text-align: center;
-    margin: 0; 
+.floatingCompareWrapper {
+    position: fixed; /* ทำให้ปุ่มลอยตามหน้าจอ */
+    bottom: 20px; /* ระยะห่างจากด้านล่าง */
+    right: 20px; /* ระยะห่างจากด้านขวา */
+    z-index: 990; /* ให้ปุ่มอยู่ด้านบนสุด (ต่ำกว่า Modal) */
+    width: auto;
+    /* ในโหมดมือถืออาจจะต้องการให้ปุ่มใหญ่ขึ้นและอยู่กึ่งกลางด้านล่าง */
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 90%;
 }
 
 /* --- Summary Button --- */
 .showCompareSummaryButton {
+    /* ใช้สไตล์เดิม แต่กำหนดให้ขนาดเหมาะกับการลอยตัว */
     padding: 12px 25px;
     background-color: var(--accent-color); 
     color: white;
@@ -122,9 +130,11 @@
     font-weight: bold;
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(255, 152, 0, 0.4);
-    width: 100%;
-    max-width: 350px;
-    align-self: center; 
+    width: 100%; /* เต็มความกว้างของ wrapper (ในโหมดมือถือ) */
+    max-width: 350px; /* จำกัดความกว้างสูงสุด */
+    
+    /* 🛑 เพิ่ม transition เพื่อให้ปุ่มสวยงามขึ้นเมื่อปรากฏ/หายไป */
+    transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 .showCompareSummaryButton:hover {
@@ -405,6 +415,17 @@
 
     .filterButton, .filterSelectBrand {
         font-size: 0.9em;
+    }
+
+    /* 🛑 ปรับ Floating Button สำหรับ Desktop */
+    .floatingCompareWrapper {
+        position: fixed;
+        bottom: 30px; 
+        right: 30px; 
+        left: auto; /* ยกเลิกการจัดกึ่งกลางด้านล่าง */
+        transform: none; /* ยกเลิกการ translate */
+        max-width: none;
+        width: auto;
     }
 
     .summaryButtonContainer {

@@ -1,7 +1,7 @@
-// pages/index.js (CODE FINALIZED)
+// pages/index.js (FINALIZED CODE WITH FLOATING BUTTON)
 import Head from 'next/head';
 import { useState, useMemo } from 'react';
-// 🟢 ไม่ต้องเปลี่ยนบรรทัดนี้ เพราะ catFoodData ถูกเรียกจากไฟล์ภายนอกอยู่แล้ว
+// 🟢 การเรียกใช้ Data จากไฟล์ภายนอก
 import { catFoodData } from '../data/catFoodData'; 
 import styles from '../styles/Home.module.css';
 
@@ -9,17 +9,15 @@ import styles from '../styles/Home.module.css';
 
 // ฟังก์ชันสำหรับคำนวณ Dry Matter Basis (DMB)
 const calculateDMB = (nutrientValue, moisture) => {
-    // ใช้ parseFloat เพื่อให้มั่นใจว่าค่าที่ส่งเข้ามาเป็นตัวเลข
     const nutrient = parseFloat(nutrientValue) / 100;
     const moistureDecimal = parseFloat(moisture) / 100;
-    
     const dryMatter = 1 - moistureDecimal;
 
     if (dryMatter <= 0) return 'N/A';
     
     const dmb = (nutrient / dryMatter) * 100;
     
-    return dmb.toFixed(1); // ส่งคืนเป็นตัวเลขที่ format แล้ว (ไม่ต้องใส่ %)
+    return dmb.toFixed(1); // ส่งคืนเป็นค่าตัวเลขที่ format แล้ว
 };
 
 // ฟังก์ชัน formatKey
@@ -37,7 +35,6 @@ const FoodCard = ({ food, isComparing, toggleComparison }) => {
     return (
         <div 
             className={`${styles.foodCard} ${cardClass} ${isChecked ? styles.selectedForComparison : ''}`}
-            // 🛑 ลบ onClick บน Card ออกไป เพื่อป้องกันการคลิกที่ปุ่มซ้ำ
         >
             
             <div className={styles.foodImageContainer}>
@@ -52,13 +49,11 @@ const FoodCard = ({ food, isComparing, toggleComparison }) => {
             </div>
 
             <div className={styles.cardHeader}>
-                {/* 🛑 ลบ style inline */}
                 <p style={{ fontSize: '1.1em', color: '#555', fontWeight: 600 }}>
                     {food.brand}
                 </p>
                 <h2>{food.name}</h2>
                 <p>ประเภท: {food.type} | อายุ: {food.age}</p>
-                {/* 🛑 ลบ style inline */}
                 <p style={{ fontSize: '0.8em', color: '#999' }}>
                     Code: {food.foodcode || '-'}
                 </p>
@@ -66,24 +61,20 @@ const FoodCard = ({ food, isComparing, toggleComparison }) => {
             
             <hr style={{ margin: '15px 0', borderTop: '1px solid #eee' }} />
 
-            {/* 🛑 ลบ style inline */}
             <h3 style={{ fontSize: '1.1em', marginBottom: '10px', color: '#333' }}>
                 อัตราส่วนโภชนาการ (DMB)
             </h3>
             <ul className={styles.nutritionList}>
-                {/* 🛑 แก้ไข Logic การแสดงผลให้สวยงามขึ้น และเน้น DMB */}
                 {Object.entries(food.nutrition).map(([key, value]) => {
                     const moisture = food.nutrition.moisture;
                     let displayValue = `${value}% (As Fed)`;
                     let colorStyle = {};
 
                     if (key === 'moisture') {
-                        // ไม่ต้องคำนวณ DMB สำหรับความชื้น
                         colorStyle = { color: '#d32f2f' }; 
                     } else if (['protein', 'fat', 'fiber'].includes(key)) {
-                        // แสดงค่า DMB สำหรับสารอาหารหลัก
                         const dmbValue = calculateDMB(value, moisture);
-                        displayValue = `${dmbValue}% (DMB)`; // แสดงเฉพาะ DMB ใน Card
+                        displayValue = `${dmbValue}% (DMB)`;
                         colorStyle = { color: styles['--primary-color'] || '#007bff' }; 
                     } else if (key === 'taurine') {
                          colorStyle = { color: styles['--primary-color'] || '#007bff' }; 
@@ -121,10 +112,11 @@ const ComparisonModal = ({ comparingItems, onClose, onClear }) => {
         if (key === 'protein' || key === 'fat' || key === 'fiber') {
             return calculateDMB(value, item.nutrition.moisture) + '%';
         }
-        return value + (key !== 'taurine' ? '%' : ''); // Taurine ไม่จำเป็นต้องมี % เสมอไป (แล้วแต่หน่วยข้อมูล)
+        // เพิ่ม % ให้ค่าอื่นที่ไม่ใช่ DMB
+        return value + (key !== 'taurine' ? '%' : ''); 
     };
 
-    // แถวที่ต้องการแสดงในตาราง (เน้น DMB สำหรับสารอาหารหลัก)
+    // แถวที่ต้องการแสดงในตาราง
     const tableKeys = ['protein', 'fat', 'fiber', 'moisture', 'taurine']; 
 
     return (
@@ -139,7 +131,6 @@ const ComparisonModal = ({ comparingItems, onClose, onClear }) => {
                     <table className={styles.comparisonTable}>
                         <thead>
                             <tr>
-                                {/* 🛑 ปรับปรุง Th ให้แสดง DMB */}
                                 <th className={styles.tableKey}>สารอาหาร</th>
                                 {comparingItems.map(item => (
                                     <th key={item.id} className={styles.compareHeader}>
@@ -166,7 +157,7 @@ const ComparisonModal = ({ comparingItems, onClose, onClear }) => {
                                     ))}
                                 </tr>
                             ))}
-                            {/* เพิ่มแถวสำหรับ Age และ Type */}
+                            {/* Age และ Type */}
                             <tr>
                                 <td className={styles.tableKey}>Age</td>
                                 {comparingItems.map(item => <td key={item.id}>{item.age}</td>)}
@@ -262,15 +253,15 @@ const Home = () => {
                 <title>Cat Food Comparator</title>
             </Head>
             
-            {/* 🛑 แก้ไข: ใช้ Class CSS แทน style inline */}
+            {/* 🟢 ใช้ Class CSS ใหม่สำหรับ Title */}
             <h1 className={styles.pageTitle}>
                 😻 เปรียบเทียบอาหารแมว
             </h1>
             
-            {/* 🛑 ปรับปรุงส่วน Filter Controls ทั้งหมด */}
+            {/* --- Filter Controls --- */}
             <div className={styles.filterControls}>
 
-                {/* Filter แบรนด์ (ใช้ Select) */}
+                {/* Filter แบรนด์ (Select) */}
                 <div className={styles.filterGroup}>
                     <label>แบรนด์:</label>
                     <select 
@@ -284,7 +275,7 @@ const Home = () => {
                     </select>
                 </div>
 
-                {/* Filter ประเภทอาหาร (ใช้ Button Group) */}
+                {/* Filter ประเภทอาหาร (Button Group) */}
                 <div className={styles.filterGroup}>
                     <label>ประเภท:</label>
                     <div className={styles.buttonGroup}>
@@ -300,7 +291,7 @@ const Home = () => {
                     </div>
                 </div>
 
-                {/* Filter อายุแมว (ใช้ Button Group) */}
+                {/* Filter อายุแมว (Button Group) */}
                 <div className={styles.filterGroup}>
                     <label>อายุแมว:</label>
                     <div className={styles.buttonGroup}>
@@ -315,20 +306,22 @@ const Home = () => {
                         ))}
                     </div>
                 </div>
-
-                {/* แสดงปุ่ม "ดูตารางเปรียบเทียบ" เมื่อมีสินค้าถูกเลือก */}
-                {comparingItems.length > 0 && (
-                    <div className={styles.summaryButtonContainer}>
-                        <button
-                            onClick={() => setIsModalOpen(true)} 
-                            className={styles.showCompareSummaryButton} 
-                        >
-                            ดูตารางเปรียบเทียบ ({comparingItems.length} / 4)
-                        </button>
-                    </div>
-                )}
             </div>
             {/* --- สิ้นสุด Filter Controls --- */}
+
+            {/* 🟢 Floating Button Wrapper (ปุ่มลอยที่ด้านล่างขวา) */}
+            {comparingItems.length > 0 && (
+                <div className={styles.floatingCompareWrapper}>
+                    <button
+                        onClick={() => setIsModalOpen(true)} 
+                        className={styles.showCompareSummaryButton} 
+                    >
+                        ดูตารางเปรียบเทียบ ({comparingItems.length} / 4)
+                    </button>
+                </div>
+            )}
+            {/* 🟢 สิ้นสุด Floating Button Wrapper */}
+
 
             {/* ส่วน Grid แสดง Card อาหารที่ถูกกรอง */}
             <div className={styles.foodGrid}>
@@ -348,7 +341,7 @@ const Home = () => {
                 )}
             </div>
 
-            {/* แสดง Comparison Modal เมื่อ isModalOpen เป็น true เท่านั้น */}
+            {/* แสดง Comparison Modal */}
             {isModalOpen && comparingItems.length > 0 && (
                 <ComparisonModal 
                     comparingItems={comparingItems}
