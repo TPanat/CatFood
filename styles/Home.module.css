@@ -1,284 +1,356 @@
 /* styles/Home.module.css */
 
 .container {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
+/* --- Grid & Card Styles --- */
+
 .foodGrid {
-  /* ใช้ Grid เพื่อวาง Card เปรียบเทียบ */
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* ปรับให้เหมาะสมกับหน้าจอ */
-  gap: 20px;
-  margin-top: 30px;
+  /* ใช้ Grid เพื่อวาง Card เปรียบเทียบ */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* ปรับให้เหมาะสมกับหน้าจอ */
+  gap: 20px;
+  margin-top: 30px;
 }
 
 .foodCard {
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s;
-  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
+  background-color: #ffffff;
 }
 
 .foodCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.selectedForComparison {
+  /* สไตล์เมื่อถูกเลือกเพื่อเปรียบเทียบ */
+  border: 2px solid #007bff !important;
+  box-shadow: 0 0 15px rgba(0, 123, 255, 0.4);
 }
 
 .dryType {
-  border-top: 5px solid #ffcc80; /* สีส้มอ่อนสำหรับอาหารแห้ง */
+  border-top: 5px solid #ffcc80; /* สีส้มอ่อนสำหรับอาหารแห้ง */
 }
 
 .wetType {
-  border-top: 5px solid #80deea; /* สีฟ้าอ่อนสำหรับอาหารเปียก */
+  border-top: 5px solid #80deea; /* สีฟ้าอ่อนสำหรับอาหารเปียก */
 }
 
 .cardHeader {
-  text-align: center;
-  margin-bottom: 15px;
+  text-align: center;
+  margin-bottom: 15px;
 }
 
 .cardHeader h2 {
-  font-size: 1.5em;
-  margin: 0;
-  color: #333;
+  font-size: 1.5em;
+  margin: 0;
+  color: #333;
 }
 
 .cardHeader p {
-  font-weight: bold;
-  font-size: 0.9em;
-  margin-top: 5px;
-  color: #555;
-}
-
-.nutritionList {
-  list-style: none;
-  padding: 0;
-}
-
-.nutritionItem {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px dashed #f0f0f0;
-  font-size: 0.95em;
-}
-
-.nutritionItem:last-child {
-  border-bottom: none;
-}
-
-.nutritionItem span:first-child {
-  font-weight: 500;
-  color: #444;
-}
-
-.nutritionItem span:last-child {
-  font-weight: bold;
-  color: #007bff; /* เน้นสีฟ้าสำหรับตัวเลข */
-}
-
-/* --- Filter Styles --- */
-.filterControls {
-  /* ใช้ Flexbox เพื่อจัดเรียง Group Filter และให้มันอยู่ตรงกลาง */
-  display: flex;
-  flex-wrap: wrap; /* ให้หักบรรทัดในจอมือถือ */
-  gap: 20px;
-  justify-content: center;
-  margin-bottom: 30px;
-  padding: 15px;
-  border-radius: 12px; /* โค้งมนมากขึ้น */
-  background-color: #f0f4f8; /* สีพื้นหลังอ่อนๆ */
-}
-
-.filterGroup {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.filterGroup label {
-  font-weight: bold;
-  margin-bottom: 8px;
-  color: #333;
-}
-
-.buttonGroup {
-  display: flex;
-  /* ทำให้กลุ่มปุ่มโค้งมนเป็น Pill */
-  border: 1px solid #ccc;
-  border-radius: 20px; 
-  overflow: hidden; /* ซ่อนขอบที่ไม่ต้องการเมื่อปุ่มติดกัน */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.filterButton {
-  padding: 8px 15px;
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-  font-size: 0.9em;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  color: #666;
-}
-
-.filterButton:hover:not(.active) {
-  background-color: #e6e6e6;
-}
-
-.filterButton.active {
-  /* สไตล์ของปุ่มที่ถูกเลือก */
-  background-color: #007bff; /* สีหลัก */
-  color: white;
-  font-weight: bold;
-}
-
-/* ลบตัวเลือก Select เดิมทิ้ง */
-.filterSelect {
-    display: none;
+  font-weight: bold;
+  font-size: 0.9em;
+  margin-top: 5px;
+  color: #555;
 }
 
 /* --- Image Styles --- */
 .foodImageContainer {
-  text-align: center; /* จัดรูปภาพให้อยู่ตรงกลาง */
-  margin-bottom: 15px;
+  text-align: center; /* จัดรูปภาพให้อยู่ตรงกลาง */
+  margin-bottom: 15px;
 }
 
 .foodImage {
-  max-width: 150px; /* จำกัดขนาดรูปภาพ */
-  height: auto;
-  border-radius: 8px; /* ทำให้ขอบรูปภาพมนเล็กน้อย */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  background-color: #fff; /* ใส่พื้นหลังขาวหากรูปเป็น PNG โปร่งใส */
-  padding: 5px; /* เว้นขอบเล็กน้อย */
+  max-width: 150px; /* จำกัดขนาดรูปภาพ */
+  height: auto;
+  border-radius: 8px; /* ทำให้ขอบรูปภาพมนเล็กน้อย */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #fff; /* ใส่พื้นหลังขาวหากรูปเป็น PNG โปร่งใส */
+  padding: 5px; /* เว้นขอบเล็กน้อย */
 }
 
-/* --- Comparison Modal Styles --- */
-
-.selectedForComparison {
-  /* สไตล์เมื่อถูกเลือกเพื่อเปรียบเทียบ */
-  border: 2px solid #007bff !important;
-  box-shadow: 0 0 15px rgba(0, 123, 255, 0.4);
+/* --- Nutrition List Styles --- */
+.nutritionList {
+  list-style: none;
+  padding: 0;
 }
 
+.nutritionItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px dashed #f0f0f0;
+  font-size: 0.95em;
+}
+
+.nutritionItem:last-child {
+  border-bottom: none;
+}
+
+.nutritionItem span:first-child {
+  font-weight: 500;
+  color: #444;
+}
+
+.nutritionItem span:last-child {
+  font-weight: bold;
+  color: #007bff; /* เน้นสีฟ้าสำหรับตัวเลข */
+}
+
+/* --- Compare Button Styles --- */
 .compareButton {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  margin-top: 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  background-color: #f0f0f0;
-  color: #333;
-  font-weight: bold;
-  transition: background-color 0.2s;
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #f0f0f0;
+  color: #333;
+  font-weight: bold;
+  transition: background-color 0.2s;
 }
 
 .compareButton:hover {
-  background-color: #e0e0e0;
+  background-color: #e0e0e0;
 }
 
 .compareActive {
-  background-color: #28a745; /* สีเขียวเมื่อถูกเลือก */
-  color: white;
+  background-color: #28a745; /* สีเขียวเมื่อถูกเลือก */
+  color: white;
 }
 
-/* Overlay และ Modal */
-.comparisonModalOverlay {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* พื้นหลังมืด */
-  display: flex;
-  justify-content: center;
-  align-items: flex-end; /* ให้ Modal อยู่ด้านล่าง */
-  z-index: 1000;
+.showCompareSummaryButton {
+    /* สไตล์สำหรับปุ่มที่อยู่ด้านบน Filter Controls */
+    padding: 12px 25px;
+    background-color: #ff9800; /* สีส้ม */
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s;
 }
 
-.comparisonModal {
-  background-color: white;
-  width: 95%;
-  max-width: 1000px;
-  max-height: 90vh;
-  padding: 25px;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
-  box-shadow: 0 -10px 20px rgba(0, 0, 0, 0.2);
-  overflow-y: auto; /* ให้เลื่อนได้หากเนื้อหายาว */
+.showCompareSummaryButton:hover {
+    background-color: #f57c00;
 }
 
-/* ตารางเปรียบเทียบ */
-.comparisonTableContainer {
-  overflow-x: auto; /* ทำให้ตารางเลื่อนในแนวนอนได้ (สำคัญสำหรับมือถือ) */
-  margin-top: 20px;
+/* --- Filter Styles --- */
+.filterControls {
+  /* ใช้ Flexbox เพื่อจัดเรียง Group Filter และให้มันอยู่ตรงกลาง */
+  display: flex;
+  flex-wrap: wrap; /* ให้หักบรรทัดในจอมือถือ */
+  gap: 20px;
+  justify-content: center;
+  align-items: center; /* จัดให้ตรงกลางแนวตั้ง */
+  margin-bottom: 30px;
+  padding: 15px;
+  border-radius: 12px; 
+  background-color: #f0f4f8; 
 }
 
-.comparisonTable {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 600px; /* เพื่อให้เห็นตารางได้ดีบนมือถือ */
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.comparisonTable th,
-.comparisonTable td {
-  border: 1px solid #ddd;
-  padding: 10px;
-  text-align: center;
+.filterGroup label {
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #333;
 }
 
-.comparisonTable th {
-  background-color: #f8f8f8;
-  font-weight: bold;
+.buttonGroup {
+  display: flex;
+  /* ทำให้กลุ่มปุ่มโค้งมนเป็น Pill */
+  border: 1px solid #ccc;
+  border-radius: 20px; 
+  overflow: hidden; /* ซ่อนขอบที่ไม่ต้องการเมื่อปุ่มติดกัน */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.tableKey {
-  text-align: left !important;
-  background-color: #fefefe;
-  font-weight: 500;
-  min-width: 120px;
+.filterButton {
+  padding: 8px 15px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 0.9em;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  color: #666;
 }
 
-.tableValue {
-  font-weight: bold;
-  color: #007bff;
+.filterButton:hover:not(.active) {
+  background-color: #e6e6e6;
 }
 
-.dmbLabel {
-  display: block;
-  font-size: 0.7em;
-  font-weight: normal;
-  color: #888;
-}
-
-.closeModalButton {
-  margin-top: 20px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 6px;
-  background-color: #dc3545; /* สีแดงสำหรับปุ่มปิด */
-  color: white;
-  cursor: pointer;
+.filterButton.active {
+  /* สไตล์ของปุ่มที่ถูกเลือก */
+  background-color: #007bff; /* สีหลัก */
+  color: white;
+  font-weight: bold;
 }
 
 /* สไตล์สำหรับ Select Filter */
 .filterSelectBrand {
-    padding: 8px 15px;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    background-color: white;
-    font-size: 0.9em;
-    cursor: pointer;
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    background-color: white;
+    font-size: 0.9em;
+    cursor: pointer;
 }
 
-/* จัด Filter Controls ใหม่ให้รับ Select ได้ดีขึ้น */
-.filterControls {
-    justify-content: center;
-    align-items: center; /* จัดให้ตรงกลางแนวตั้ง */
+
+/* 🚀 --- Comparison Modal Styles (แก้ไขให้ลอยกลางจอ) --- 🚀 */
+
+/* Overlay และ Modal */
+.comparisonModalOverlay {
+  position: fixed;
+  top: 0; 
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* พื้นหลังมืดขึ้นเล็กน้อย */
+  display: flex;
+  justify-content: center; /* จัดให้อยู่กลางแนวนอน */
+  align-items: center; /* จัดให้อยู่กลางแนวตั้ง */
+  z-index: 1000;
+}
+
+.comparisonModal {
+  position: relative; /* สำคัญ: ต้องใส่เพื่อให้ปุ่ม X ถูกจัดวางได้ */
+  background-color: white;
+  width: 95%;
+  max-width: 1000px;
+  max-height: 90vh; /* จำกัดความสูงของ Modal */
+  padding: 30px 25px 20px; 
+  border-radius: 15px; 
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  overflow-y: auto; 
+}
+
+/* ปุ่มปิด Modal (X) */
+.closeModalX {
+  position: absolute;
+  top: 15px; 
+  right: 15px; 
+  background: #f0f0f0;
+  border: none;
+  border-radius: 50%; /* ทำให้เป็นวงกลม */
+  width: 30px;
+  height: 30px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  z-index: 1010;
+}
+
+.closeModalX:hover {
+  background-color: #ddd;
+}
+
+/* ปุ่มควบคุมด้านล่าง Modal */
+.modalControlButtons {
+    display: flex;
+    justify-content: space-between; /* จัดปุ่มให้ห่างกัน */
+    gap: 15px;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee; /* เส้นแบ่งจากตาราง */
+}
+
+.clearComparisonButton,
+.continueCompareButton {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    flex-grow: 1;
+    transition: background-color 0.2s;
+}
+
+/* ปุ่มปิดและเลือกต่อ */
+.continueCompareButton {
+  background-color: #007bff; 
+  color: white;
+}
+
+.continueCompareButton:hover {
+    background-color: #0056b3;
+}
+
+/* ปุ่มล้างรายการทั้งหมด */
+.clearComparisonButton {
+    background-color: #dc3545; 
+    color: white;
+}
+
+.clearComparisonButton:hover {
+    background-color: #c82333;
+}
+
+
+/* --- ตารางเปรียบเทียบ --- */
+.comparisonTableContainer {
+  overflow-x: auto; /* ทำให้ตารางเลื่อนในแนวนอนได้ (สำคัญสำหรับมือถือ) */
+  margin-top: 20px;
+}
+
+.comparisonTable {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px; /* เพื่อให้เห็นตารางได้ดีบนมือถือ */
+}
+
+.comparisonTable th,
+.comparisonTable td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+.comparisonTable th {
+  background-color: #f8f8f8;
+  font-weight: bold;
+}
+
+.compareHeader {
+    /* สไตล์หัวคอลัมน์สินค้า */
+    color: #333;
+    font-size: 0.9em;
+}
+
+.tableKey {
+  text-align: left !important;
+  background-color: #fefefe;
+  font-weight: 500;
+  min-width: 120px;
+}
+
+.tableValue {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.dmbLabel {
+  display: block;
+  font-size: 0.7em;
+  font-weight: normal;
+  color: #888;
 }
