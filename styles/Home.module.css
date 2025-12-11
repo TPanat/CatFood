@@ -1,139 +1,201 @@
-/* styles/Home.module.css (MOBILE FIRST - REV 2) */
+/* styles/Home.module.css (MODERN & ROUNDED - Mobile First) */
+
+/* --- Variables (เพื่อควบคุมสีหลักและรัศมีขอบ) --- */
+:root {
+    --primary-color: #007bff; /* สีน้ำเงินหลัก */
+    --accent-color: #ff9800; /* สีส้มเน้น */
+    --background-light: #f4f7f9; /* สีพื้นหลังอ่อน */
+    --border-radius-card: 15px; /* รัศมีขอบ Card */
+    --border-radius-button: 25px; /* รัศมีขอบปุ่ม/Filter */
+    --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08); /* เงาอ่อน */
+    --shadow-lift: 0 8px 16px rgba(0, 0, 0, 0.15); /* เงายกสูง */
+}
 
 /* --- 1. Global & Container (Mobile Default) --- */
 .container {
-    padding: 10px; /* ลด padding สำหรับมือถือ */
+    font-family: 'Sukhumvit Set', 'Kanit', sans-serif; /* แนะนำให้ใช้ฟอนต์ที่ดูทันสมัย */
+    padding: 10px;
     max-width: 1200px;
     margin: 0 auto;
 }
 
+h1 {
+    color: #2c3e50; /* สีเข้ม */
+    font-weight: 700;
+}
+
+
 /* --- 2. Filter Controls (Mobile Default: Stacked) --- */
 .filterControls {
-    /* บนมือถือ: เรียงซ้อนกันแนวตั้ง */
     display: flex;
     flex-direction: column;
-    gap: 10px; /* ลดช่องว่าง */
+    gap: 12px;
     justify-content: center;
-    align-items: stretch; /* ให้เต็มความกว้าง */
-    margin-bottom: 20px;
-    padding: 10px;
-    border-radius: 8px;
-    background-color: #f0f4f8;
+    align-items: stretch;
+    margin-bottom: 25px;
+    padding: 15px;
+    border-radius: var(--border-radius-card); /* ใช้รัศมี Card */
+    background-color: var(--background-light);
+    box-shadow: var(--shadow-soft);
 }
 
 .filterGroup {
-    /* ให้ Label และ Control อยู่ในบรรทัดเดียวกันบนมือถือ */
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    width: 100%; /* ให้เต็มความกว้าง */
+    width: 100%;
 }
 
 .filterGroup label {
-    font-weight: bold;
+    font-weight: 600;
     margin-right: 10px;
-    color: #333;
-    flex-shrink: 0; /* ไม่ให้ label หด */
+    color: #4a4a4a;
+    flex-shrink: 0;
 }
 
+/* --- Button Group & Select Styles --- */
+
 .buttonGroup, .filterSelectBrand {
-    flex-grow: 1; /* ให้ใช้พื้นที่ที่เหลือ */
+    flex-grow: 1;
 }
 
 .buttonGroup {
     display: flex;
-    border: 1px solid #ccc;
-    border-radius: 20px;
+    border: 1px solid #c8d4e0;
+    border-radius: var(--border-radius-button); /* โค้งมนมาก */
     overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 }
 
 .filterButton {
-    padding: 6px 10px; /* ลด padding */
+    padding: 8px 12px;
     border: none;
     background-color: transparent;
     cursor: pointer;
-    font-size: 0.85em; /* ลดขนาดตัวอักษร */
+    font-size: 0.85em;
     font-weight: 500;
     transition: all 0.2s ease;
     color: #666;
-    flex-grow: 1; /* ให้ปุ่มแบ่งพื้นที่เท่ากัน */
-    white-space: nowrap; /* ป้องกันการหักบรรทัดของข้อความในปุ่ม */
+    flex-grow: 1;
+    white-space: nowrap;
+}
+
+.filterButton:hover:not(.active) {
+    background-color: #eef2f5;
 }
 
 .filterButton.active {
-    background-color: #007bff;
+    background-color: var(--primary-color);
     color: white;
-    font-weight: bold;
+    font-weight: 600;
 }
 
 .filterSelectBrand {
-    padding: 6px 10px;
-    border: 1px solid #ccc;
-    border-radius: 20px;
+    padding: 8px 15px;
+    border: 1px solid #c8d4e0;
+    border-radius: var(--border-radius-button); /* โค้งมนมาก */
     background-color: white;
     font-size: 0.85em;
     cursor: pointer;
 }
 
+/* --- Summary Button --- */
 .showCompareSummaryButton {
-    padding: 10px 20px;
-    background-color: #ff9800;
+    padding: 12px 25px;
+    background-color: var(--accent-color); /* สีส้มเน้น */
     color: white;
     border: none;
-    border-radius: 25px;
-    font-size: 0.9em; /* ขนาดเหมาะสมกับมือถือ */
+    border-radius: var(--border-radius-button);
+    font-size: 0.95em;
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 100%; /* ให้เต็มความกว้างบนมือถือ */
-    max-width: 300px;
+    box-shadow: 0 4px 8px rgba(255, 152, 0, 0.4);
+    width: 100%;
+    max-width: 350px;
+    align-self: center; /* จัดให้อยู่ตรงกลางแนวนอนเมื่อ Flex Direction เป็น Column */
 }
 
 .showCompareSummaryButton:hover {
     background-color: #f57c00;
+    box-shadow: 0 6px 10px rgba(255, 152, 0, 0.6);
 }
 
 /* --- 3. Food Grid & Card (Mobile Default: Single Column) --- */
 .foodGrid {
-    /* บนมือถือ: 1 คอลัมน์ */
     display: grid;
     grid-template-columns: 1fr; 
-    gap: 15px; /* ลดช่องว่าง */
-    margin-top: 20px;
+    gap: 20px;
+    margin-top: 25px;
 }
 
 .foodCard {
-    /* ปรับปรุง Card */
-    padding: 15px; /* ลด padding */
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    border-radius: var(--border-radius-card); /* ใช้รัศมี Card */
+    box-shadow: var(--shadow-soft);
+    transition: all 0.3s ease;
+    border: 1px solid #f0f0f0;
 }
+
+.foodCard:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lift);
+}
+
+.selectedForComparison {
+    border: 3px solid var(--primary-color) !important;
+    box-shadow: 0 0 20px rgba(0, 123, 255, 0.4);
+}
+
+.dryType {
+    border-top: 5px solid #ffcc80;
+}
+
+.wetType {
+    border-top: 5px solid #80deea;
+}
+
+.cardHeader {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.cardHeader h2 {
+    color: #2c3e50;
+    margin-top: 5px;
+}
+
+/* --- Image & Nutrition --- */
 
 .foodImageContainer {
     margin-bottom: 10px;
 }
 
 .foodImage {
-    max-width: 100px; /* ลดขนาดรูปภาพบนมือถือ */
+    max-width: 120px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.cardHeader h2 {
-    font-size: 1.3em;
+.nutritionItem {
+    padding: 10px 0;
+    border-bottom: 1px dashed #e0e0e0;
+    font-size: 0.95em;
 }
 
-.nutritionList {
-    font-size: 0.9em;
+.nutritionItem span:last-child {
+    font-weight: 600;
+    color: var(--primary-color); 
 }
 
-/* === การแก้ไขสไตล์ปุ่มเปรียบเทียบ (Compare Button) === */
+/* --- Compare Button (โค้งมนเหมือน Filter) --- */
 .compareButton {
-    padding: 8px 15px; /* ปรับขนาด Padding */
-    font-size: 0.85em;
-    margin-top: 10px;
-    border-radius: 20px; /* ทำให้ปุ่มโค้งมน */
-    border: 1px solid #ccc; /* เพิ่มเส้นขอบ */
+    padding: 10px 20px; 
+    font-size: 0.9em;
+    margin-top: 15px;
+    border-radius: var(--border-radius-button); /* โค้งมนมาก */
+    border: 1px solid #c8d4e0; 
     background-color: white; 
     color: #333;
     cursor: pointer;
@@ -145,17 +207,15 @@
     background-color: #f0f0f0;
 }
 
-.compareButton.selected {
-    /* สไตล์เมื่อถูกเลือกแล้ว (เหมือนปุ่ม Filter ที่ Active) */
-    background-color: #007bff; 
+.compareActive {
+    background-color: #28a745; /* สีเขียว */
     color: white;
-    border-color: #007bff; 
-    font-weight: bold;
+    border-color: #28a745; 
+    font-weight: 600;
 }
-/* ================================================= */
 
 
-/* --- 4. Comparison Modal (Mobile Centric) --- */
+/* --- 4. Comparison Modal --- */
 
 .comparisonModalOverlay {
     position: fixed;
@@ -163,7 +223,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* มืดขึ้นเล็กน้อยบนมือถือ */
+    background-color: rgba(44, 62, 80, 0.8); /* มืดและดูพรีเมี่ยมขึ้น */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -173,90 +233,142 @@
 .comparisonModal {
     position: relative;
     background-color: white;
-    width: 95%; /* ให้ Modal กว้างขึ้นบนมือถือ */
+    width: 95%;
     max-width: 1000px;
-    max-height: 95vh; /* ให้เต็มความสูงมากขึ้น */
-    padding: 20px 15px; /* ลด Padding */
-    border-radius: 10px; 
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    max-height: 95vh;
+    padding: 35px 20px 20px; /* เพิ่ม padding ด้านบน */
+    border-radius: var(--border-radius-card); 
+    box-shadow: var(--shadow-lift);
     overflow-y: auto; 
 }
 
 .closeModalX {
-    top: 10px; 
-    right: 10px; 
-    width: 25px;
-    height: 25px;
-    font-size: 0.9em;
+    top: 15px; 
+    right: 15px; 
+    background: #eef2f5;
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    z-index: 1010;
 }
 
+.closeModalX:hover {
+    background-color: #c8d4e0;
+}
+
+/* --- Table Styles --- */
 .comparisonTableContainer {
     overflow-x: auto;
-    margin-top: 15px;
+    margin-top: 20px;
+    border: 1px solid #e0e0e0; /* เพิ่มเส้นขอบรอบตาราง */
+    border-radius: 8px;
 }
 
 .comparisonTable {
     width: 100%;
     border-collapse: collapse;
-    min-width: 550px; /* กำหนดขนาดขั้นต่ำให้ตาราง */
-    font-size: 0.9em; /* ลดขนาดฟอนต์ในตาราง */
+    min-width: 600px; 
+    font-size: 0.9em; 
 }
 
 .comparisonTable th,
 .comparisonTable td {
-    padding: 8px; /* ลด padding ในตาราง */
+    border: 1px solid #f0f0f0;
+    padding: 10px 8px;
+    text-align: center;
+}
+
+.comparisonTable th {
+    background-color: #eef2f5;
+    font-weight: 600;
+    color: #4a4a4a;
+    position: sticky; /* หัวตารางติดอยู่ด้านบน */
+    top: 0;
+    z-index: 10;
 }
 
 .tableKey {
-    min-width: 100px; /* ลด min-width */
+    text-align: left !important;
+    background-color: #ffffff;
+    font-weight: 500;
+    min-width: 120px;
+    color: #333;
 }
 
-.dmbLabel {
-    font-size: 0.65em;
+.tableValue {
+    font-weight: 600;
+    color: var(--primary-color);
 }
 
+/* --- Modal Control Buttons --- */
 .modalControlButtons {
-    /* ปุ่มควบคุม: ซ้อนกันแนวตั้งบนมือถือ */
     flex-direction: column; 
     gap: 10px;
-    margin-top: 15px;
-    padding-top: 10px;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0; 
+}
+
+.clearComparisonButton,
+.continueCompareButton {
+    padding: 12px 20px;
+    border: none;
+    border-radius: var(--border-radius-button); 
+    cursor: pointer;
+    font-weight: 600;
+    flex-grow: 1;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.continueCompareButton {
+    background-color: var(--primary-color); 
+    color: white;
+}
+
+.continueCompareButton:hover {
+    background-color: #0056b3;
+}
+
+.clearComparisonButton {
+    background-color: #dc3545; /* สีแดง */
+    color: white;
+}
+
+.clearComparisonButton:hover {
+    background-color: #c82333;
 }
 
 /* --- 5. Media Queries for Tablet/Desktop (>= 768px) --- */
 
 @media (min-width: 768px) {
     
-    /* Container */
     .container {
-        padding: 20px;
+        padding: 30px 20px;
     }
 
-    /* Filter Controls: กลับไปเป็นแนวนอน */
+    /* Filter Controls */
     .filterControls {
         flex-direction: row;
+        flex-wrap: wrap; /* อนุญาตให้หักบรรทัดหากมีหลาย Filter */
         gap: 20px;
-        padding: 15px;
-        border-radius: 12px;
+        padding: 20px;
     }
     
     .filterGroup {
         flex-direction: column;
         align-items: center;
+        width: auto; /* ไม่ต้องเต็ม 100% */
     }
 
-    .filterGroup label {
-        margin-bottom: 8px;
-    }
-
-    .buttonGroup {
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    }
-
-    .filterButton {
-        padding: 8px 15px;
+    .filterButton, .filterSelectBrand {
         font-size: 0.9em;
-        flex-grow: 0;
     }
 
     .showCompareSummaryButton {
@@ -265,26 +377,21 @@
         max-width: none;
     }
 
-    /* Food Grid: 2 คอลัมน์สำหรับ Tablet */
+    /* Food Grid: 2 คอลัมน์สำหรับ Tablet+ */
     .foodGrid {
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 20px;
-        margin-top: 30px;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 30px;
+        margin-top: 35px;
     }
     
     .foodImage {
-        max-width: 150px; /* ขยายรูปภาพกลับไปเป็นขนาดใหญ่ */
+        max-width: 150px;
     }
 
-    .cardHeader h2 {
-        font-size: 1.5em;
-    }
-
-    /* Modal Controls: กลับไปเป็นแนวนอน */
     .modalControlButtons {
         flex-direction: row; 
-        gap: 15px;
-        margin-top: 20px;
-        padding-top: 15px;
+        gap: 20px;
+        margin-top: 30px;
+        padding-top: 25px;
     }
 }
