@@ -20,7 +20,7 @@
     margin: 0 auto;
 }
 
-/* 🟢 แก้ไข: ใช้ Class Selector แทน h1 โดยตรง */
+/* 🟢 Page Title (ใช้แทน h1 โดยตรง) */
 .pageTitle { 
     color: #2c3e50; 
     font-weight: 700;
@@ -45,7 +45,6 @@
 }
 
 .filterGroup {
-    /* บนมือถือ: เรียงในแนวนอน (Label ซ้าย, Control ขวา) */
     display: flex; 
     flex-direction: row;
     justify-content: space-between;
@@ -106,10 +105,10 @@
     cursor: pointer;
 }
 
-/* --- Summary Button Container (สำหรับ Mobile Layout) --- */
+/* --- Summary Button Container --- */
 .summaryButtonContainer {
     text-align: center;
-    margin: 0; /* ลบ margin เดิมของ div ที่มีการจัด inline style */
+    margin: 0; 
 }
 
 /* --- Summary Button --- */
@@ -168,7 +167,19 @@
     margin-bottom: 15px;
 }
 
-/* 🛑 ปรับปรุงการแสดงผลโภชนาการใน Card */
+/* 🟢 แก้ไข: จัดรูปภาพให้อยู่กึ่งกลาง Card */
+.foodImageContainer {
+    margin-bottom: 10px;
+    text-align: center; 
+}
+
+.foodImage {
+    max-width: 120px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
 .nutritionList {
     list-style: none;
     padding: 0;
@@ -387,7 +398,6 @@
     }
     
     .filterGroup {
-        /* กลับไปเป็น Column ในจอใหญ่เพื่อให้ Label อยู่ด้านบน */
         flex-direction: column; 
         align-items: center;
         width: auto; 
@@ -397,11 +407,9 @@
         font-size: 0.9em;
     }
 
-    /* Summary Button Container */
     .summaryButtonContainer {
-        /* ปุ่ม Summary จะอยู่ในบรรทัดเดียวกับ Filter บนจอใหญ่ */
         width: auto; 
-        margin-left: auto; /* ดันไปขวาสุด */
+        margin-left: auto; 
         align-self: center;
     }
 
