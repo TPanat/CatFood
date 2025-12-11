@@ -1,7 +1,7 @@
 // pages/index.js
 import Head from 'next/head';
 import { useState, useMemo } from 'react';
-import { catFoodData } from '../data/catFoodData';
+import { catFoodData } from '../data/catFoodData'; 
 import styles from '../styles/Home.module.css';
 
 // --- ฟังก์ชันช่วยเหลือ (Helpers) ---
@@ -23,12 +23,15 @@ const calculateDMB = (nutrientValue, moisture) => {
     return dmb.toFixed(1) + '% (DMB)';
 };
 
-// --- FoodCard Component (ปรับปรุง: เพิ่มปุ่มเปรียบเทียบและเน้น Brand/Code) ---
-const FoodCard = ({ food, isComparing, toggleComparison }) => {
-    const formatKey = (key) => {
-        return key.charAt(0).toUpperCase() + key.slice(1);
-    };
+// ฟังก์ชัน formatKey ถูกย้ายมาอยู่ด้านนอกเพื่อให้ Component ต่างๆ ใช้ได้
+const formatKey = (key) => {
+    return key.charAt(0).toUpperCase() + key.slice(1);
+};
 
+
+// --- FoodCard Component (ปรับปรุง: ไม่มีอะไรเปลี่ยนแปลงจากเดิม) ---
+const FoodCard = ({ food, isComparing, toggleComparison }) => {
+    
     const cardClass = food.type === 'Dry' ? styles.dryType : styles.wetType;
     const isChecked = isComparing(food.id);
 
@@ -95,20 +98,108 @@ const FoodCard = ({ food, isComparing, toggleComparison }) => {
 };
 // --- สิ้นสุด FoodCard Component ---
 
+
+// --- Comparison Modal Component (ปรับปรุง: เพิ่มปุ่มปิดและรับ onClose prop) ---
+const ComparisonModal = ({ comparingItems, onClose, onClear }) => {
+    
+    // ฟังก์ชันสำหรับเน้นค่า DMB (ให้สอดคล้องกับ Logic ในตาราง)
+    const getDMBValue = (item, key) => {
+        const value = item.nutrition[key];
+        if (key === 'protein' || key === 'fat') {
+            return calculateDMB(value, item.nutrition.moisture);
+        }
+        return value;
+    };
+
+
+    return (
+        // ใช้ Overlay เพื่อปิดการทำงานส่วนอื่นของหน้า
+        <div className={styles.comparisonModalOverlay}> 
+            <div className={styles.comparisonModal}>
+                
+                {/* ปุ่มปิด Modal (X) */}
+                <button onClick={onClose} className={styles.closeModalX}>X</button> 
+
+                <h2>📊 เปรียบเทียบสินค้า ({comparingItems.length} รายการ)</h2>
+                
+                <div className={styles.comparisonTableContainer}>
+                    <table className={styles.comparisonTable}>
+                        <thead>
+                            <tr>
+                                <th>สารอาหาร</th>
+                                {comparingItems.map(item => (
+                                    <th key={item.id} className={styles.compareHeader}>
+                                        {item.name} 
+                                        <span style={{ display: 'block', fontSize: '0.7em', color: '#999' }}>({item.brand})</span>
+                                    </th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {/* แสดงโภชนาการหลัก */}
+                            {['protein', 'fat', 'moisture', 'taurine', 'fiber'].map(key => (
+                                <tr key={key}>
+                                    <td className={styles.tableKey}>
+                                        {formatKey(key)} 
+                                        {(key === 'protein' || key === 'fat') && <span className={styles.dmbLabel}>(DMB)</span>}
+                                    </td>
+                                    {comparingItems.map(item => (
+                                        <td key={item.id} className={styles.tableValue}>
+                                            {getDMBValue(item, key)}
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))}
+                            {/* เพิ่มแถวสำหรับ Age และ Type */}
+                            <tr>
+                                <td className={styles.tableKey}>Age</td>
+                                {comparingItems.map(item => <td key={item.id}>{item.age}</td>)}
+                            </tr>
+                            <tr>
+                                <td className={styles.tableKey}>Type</td>
+                                {comparingItems.map(item => <td key={item.id}>{item.type}</td>)}
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div className={styles.modalControlButtons}>
+                    <button 
+                        onClick={onClose} 
+                        className={styles.continueCompareButton}
+                    >
+                        <span style={{ fontSize: '1.2em' }}>&laquo;</span> ปิดตาราง (เลือกต่อ)
+                    </button>
+                    <button 
+                        onClick={onClear} 
+                        className={styles.clearComparisonButton}
+                    >
+                        🗑️ ล้างรายการเปรียบเทียบทั้งหมด
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+// --- สิ้นสุด Comparison Modal Component ---
+
+
 // Component หลัก
 const Home = () => {
     // 1. State สำหรับ Filter
     const [filterType, setFilterType] = useState('All');
     const [filterAge, setFilterAge] = useState('All');
-    const [filterBrand, setFilterBrand] = useState('All'); // เพิ่ม Brand State
+    const [filterBrand, setFilterBrand] = useState('All'); 
     
     // 2. State สำหรับ Comparison
     const [comparisonList, setComparisonList] = useState([]); // เก็บ array ของ food.id ที่ถูกเลือก
+    // NEW! State สำหรับควบคุมการเปิด/ปิด Modal
+    const [isModalOpen, setIsModalOpen] = useState(false); 
 
     // ตัวเลือกสำหรับ Filter
     const typeOptions = ['All', 'Dry', 'Wet', 'Freeze-Dried', 'Prescription'];
     const ageOptions = ['All', 'Kitten', 'Adult', 'Senior', 'All Life Stages', 'Mother & Baby'];
-    const brandOptions = ['All', ...new Set(catFoodData.map(f => f.brand))].sort(); // ดึงแบรนด์ที่ไม่ซ้ำ
+    const brandOptions = ['All', ...new Set(catFoodData.map(f => f.brand))].sort(); 
 
     // 3. ฟังก์ชันจัดการการเลือกเปรียบเทียบ
     const toggleComparison = (id) => {
@@ -124,6 +215,7 @@ const Home = () => {
                 return prevList;
             }
         });
+        // ไม่ต้องเปิด Modal อัตโนมัติอีกต่อไป
     };
 
     const isComparing = (id) => comparisonList.includes(id);
@@ -143,74 +235,13 @@ const Home = () => {
     const comparingItems = useMemo(() => {
         return catFoodData.filter(food => comparisonList.includes(food.id));
     }, [comparisonList]);
-
-
-    // --- Comparison Modal Component ---
-    const ComparisonModal = () => {
-        if (comparingItems.length === 0) return null;
-
-        return (
-            <div className={styles.comparisonModalOverlay}>
-                <div className={styles.comparisonModal}>
-                    <h2>📊 เปรียบเทียบสินค้า ({comparingItems.length} รายการ)</h2>
-                    
-                    <div className={styles.comparisonTableContainer}>
-                        {/* ตารางเปรียบเทียบ (สำหรับ 4 รายการ) */}
-                        <table className={styles.comparisonTable}>
-                            <thead>
-                                <tr>
-                                    <th>สารอาหาร</th>
-                                    {comparingItems.map(item => (
-                                        <th key={item.id} className={styles.compareHeader}>
-                                            {item.name} 
-                                            <span style={{ display: 'block', fontSize: '0.7em', color: '#999' }}>({item.brand})</span>
-                                        </th>
-                                    ))}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {/* แสดงโภชนาการหลัก */}
-                                {['protein', 'fat', 'moisture', 'taurine', 'fiber'].map(key => (
-                                    <tr key={key}>
-                                        <td className={styles.tableKey}>
-                                            {formatKey(key)} 
-                                            {(key === 'protein' || key === 'fat') && <span className={styles.dmbLabel}>(DMB)</span>}
-                                        </td>
-                                        {comparingItems.map(item => {
-                                            const value = item.nutrition[key];
-                                            let display = value;
-                                            
-                                            // คำนวณ DMB สำหรับ Protein/Fat
-                                            if (key === 'protein' || key === 'fat') {
-                                                display = calculateDMB(value, item.nutrition.moisture);
-                                            }
-                                            
-                                            return <td key={item.id} className={styles.tableValue}>{display}</td>;
-                                        })}
-                                    </tr>
-                                ))}
-                                {/* เพิ่มแถวสำหรับ Age และ Type */}
-                                <tr>
-                                    <td className={styles.tableKey}>Age</td>
-                                    {comparingItems.map(item => <td key={item.id}>{item.age}</td>)}
-                                </tr>
-                                <tr>
-                                    <td className={styles.tableKey}>Type</td>
-                                    {comparingItems.map(item => <td key={item.id}>{item.type}</td>)}
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <button 
-                        onClick={() => setComparisonList([])} 
-                        className={styles.closeModalButton}
-                    >
-                        ปิดและล้างรายการเปรียบเทียบ
-                    </button>
-                </div>
-            </div>
-        );
+    
+    // ฟังก์ชันสำหรับล้างรายการทั้งหมด และปิด Modal
+    const handleClearComparison = () => {
+        setComparisonList([]);
+        setIsModalOpen(false);
     };
+
 
     // --- Main Render ---
     return (
@@ -226,16 +257,13 @@ const Home = () => {
             {/* 3. ส่วนควบคุม Filter (เพิ่ม Brand Filter) */}
             <div className={styles.filterControls}>
                 
-                {/*  เพิ่มปุ่ม "แสดงตารางเปรียบเทียบ" (Fix) */}
+                {/*  เพิ่มปุ่ม "แสดงตารางเปรียบเทียบ" */}
                 {comparingItems.length > 0 && (
                     <div style={{ textAlign: 'center', margin: '20px 0' }}>
                         <button
-                            onClick={() => { 
-                                /* Logic: ให้ Modal แสดงอยู่แล้ว แต่ถ้าอยากให้มันเลื่อนไปที่ Modal 
-                                   หรือเปิด Modal เต็มหน้าจอ อาจต้องเพิ่ม State สำหรับ Modal */ 
-                                alert('ตารางเปรียบเทียบแสดงอยู่ด้านบนสุดของหน้าต่าง'); 
-                            }} 
-                            className={styles.showCompareSummaryButton} // กำหนด CSS สำหรับปุ่มนี้
+                            // แก้: เปลี่ยนจากการ alert เป็นการเปิด Modal
+                            onClick={() => setIsModalOpen(true)} 
+                            className={styles.showCompareSummaryButton} 
                         >
                             ดูตารางเปรียบเทียบ ({comparingItems.length} / 4)
                         </button>
@@ -249,7 +277,7 @@ const Home = () => {
                     <select 
                         value={filterBrand} 
                         onChange={(e) => setFilterBrand(e.target.value)}
-                        className={styles.filterSelectBrand} // ต้องเพิ่มสไตล์ให้ Select ใน CSS
+                        className={styles.filterSelectBrand} 
                     >
                         {brandOptions.map(option => (
                             <option key={option} value={option}>{option}</option>
@@ -308,16 +336,17 @@ const Home = () => {
                 )}
             </div>
 
-            {/* แสดง Comparison Modal */}
-            <ComparisonModal />
+            {/* แสดง Comparison Modal เมื่อ isModalOpen เป็น true เท่านั้น */}
+            {isModalOpen && comparingItems.length > 0 && (
+                <ComparisonModal 
+                    comparingItems={comparingItems}
+                    onClose={() => setIsModalOpen(false)} // ฟังก์ชันสำหรับปิด Modal
+                    onClear={handleClearComparison}        // ฟังก์ชันสำหรับล้างรายการและปิด Modal
+                />
+            )}
             
         </div>
     );
-};
-
-// ฟังก์ชัน formatKey ถูกย้ายมาอยู่ด้านนอกเพื่อให้ ComparisonModal ใช้ได้
-const formatKey = (key) => {
-    return key.charAt(0).toUpperCase() + key.slice(1);
 };
 
 
