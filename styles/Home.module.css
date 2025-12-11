@@ -156,3 +156,129 @@
   background-color: #fff; /* ใส่พื้นหลังขาวหากรูปเป็น PNG โปร่งใส */
   padding: 5px; /* เว้นขอบเล็กน้อย */
 }
+
+/* --- Comparison Modal Styles --- */
+
+.selectedForComparison {
+  /* สไตล์เมื่อถูกเลือกเพื่อเปรียบเทียบ */
+  border: 2px solid #007bff !important;
+  box-shadow: 0 0 15px rgba(0, 123, 255, 0.4);
+}
+
+.compareButton {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #f0f0f0;
+  color: #333;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.compareButton:hover {
+  background-color: #e0e0e0;
+}
+
+.compareActive {
+  background-color: #28a745; /* สีเขียวเมื่อถูกเลือก */
+  color: white;
+}
+
+/* Overlay และ Modal */
+.comparisonModalOverlay {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* พื้นหลังมืด */
+  display: flex;
+  justify-content: center;
+  align-items: flex-end; /* ให้ Modal อยู่ด้านล่าง */
+  z-index: 1000;
+}
+
+.comparisonModal {
+  background-color: white;
+  width: 95%;
+  max-width: 1000px;
+  max-height: 90vh;
+  padding: 25px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  box-shadow: 0 -10px 20px rgba(0, 0, 0, 0.2);
+  overflow-y: auto; /* ให้เลื่อนได้หากเนื้อหายาว */
+}
+
+/* ตารางเปรียบเทียบ */
+.comparisonTableContainer {
+  overflow-x: auto; /* ทำให้ตารางเลื่อนในแนวนอนได้ (สำคัญสำหรับมือถือ) */
+  margin-top: 20px;
+}
+
+.comparisonTable {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px; /* เพื่อให้เห็นตารางได้ดีบนมือถือ */
+}
+
+.comparisonTable th,
+.comparisonTable td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+.comparisonTable th {
+  background-color: #f8f8f8;
+  font-weight: bold;
+}
+
+.tableKey {
+  text-align: left !important;
+  background-color: #fefefe;
+  font-weight: 500;
+  min-width: 120px;
+}
+
+.tableValue {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.dmbLabel {
+  display: block;
+  font-size: 0.7em;
+  font-weight: normal;
+  color: #888;
+}
+
+.closeModalButton {
+  margin-top: 20px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  background-color: #dc3545; /* สีแดงสำหรับปุ่มปิด */
+  color: white;
+  cursor: pointer;
+}
+
+/* สไตล์สำหรับ Select Filter */
+.filterSelectBrand {
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    background-color: white;
+    font-size: 0.9em;
+    cursor: pointer;
+}
+
+/* จัด Filter Controls ใหม่ให้รับ Select ได้ดีขึ้น */
+.filterControls {
+    justify-content: center;
+    align-items: center; /* จัดให้ตรงกลางแนวตั้ง */
+}
