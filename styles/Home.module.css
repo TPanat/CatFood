@@ -1,9 +1,10 @@
-/* styles/Home.module.css (MODERN & ROUNDED - Mobile First) */
+/* styles/Home.module.css (MODERN & ROUNDED - Mobile First - Final) */
 
 /* --- Variables (เพื่อควบคุมสีหลักและรัศมีขอบ) --- */
 :root {
     --primary-color: #007bff; /* สีน้ำเงินหลัก */
     --accent-color: #ff9800; /* สีส้มเน้น */
+    --success-color: #28a745; /* สีเขียวสำหรับ Active Compare */
     --background-light: #f4f7f9; /* สีพื้นหลังอ่อน */
     --border-radius-card: 15px; /* รัศมีขอบ Card */
     --border-radius-button: 25px; /* รัศมีขอบปุ่ม/Filter */
@@ -13,15 +14,19 @@
 
 /* --- 1. Global & Container (Mobile Default) --- */
 .container {
-    font-family: 'Sukhumvit Set', 'Kanit', sans-serif; /* แนะนำให้ใช้ฟอนต์ที่ดูทันสมัย */
+    font-family: 'Sukhumvit Set', 'Kanit', sans-serif;
     padding: 10px;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-h1 {
-    color: #2c3e50; /* สีเข้ม */
+/* 🟢 แก้ไข: ใช้ Class Selector แทน h1 โดยตรง */
+.pageTitle { 
+    color: #2c3e50; 
     font-weight: 700;
+    margin-bottom: 25px; 
+    font-size: 2em; 
+    text-align: center; 
 }
 
 
@@ -34,13 +39,14 @@ h1 {
     align-items: stretch;
     margin-bottom: 25px;
     padding: 15px;
-    border-radius: var(--border-radius-card); /* ใช้รัศมี Card */
+    border-radius: var(--border-radius-card); 
     background-color: var(--background-light);
     box-shadow: var(--shadow-soft);
 }
 
 .filterGroup {
-    display: flex;
+    /* บนมือถือ: เรียงในแนวนอน (Label ซ้าย, Control ขวา) */
+    display: flex; 
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
@@ -63,7 +69,7 @@ h1 {
 .buttonGroup {
     display: flex;
     border: 1px solid #c8d4e0;
-    border-radius: var(--border-radius-button); /* โค้งมนมาก */
+    border-radius: var(--border-radius-button); 
     overflow: hidden;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 }
@@ -94,16 +100,22 @@ h1 {
 .filterSelectBrand {
     padding: 8px 15px;
     border: 1px solid #c8d4e0;
-    border-radius: var(--border-radius-button); /* โค้งมนมาก */
+    border-radius: var(--border-radius-button); 
     background-color: white;
     font-size: 0.85em;
     cursor: pointer;
 }
 
+/* --- Summary Button Container (สำหรับ Mobile Layout) --- */
+.summaryButtonContainer {
+    text-align: center;
+    margin: 0; /* ลบ margin เดิมของ div ที่มีการจัด inline style */
+}
+
 /* --- Summary Button --- */
 .showCompareSummaryButton {
     padding: 12px 25px;
-    background-color: var(--accent-color); /* สีส้มเน้น */
+    background-color: var(--accent-color); 
     color: white;
     border: none;
     border-radius: var(--border-radius-button);
@@ -113,7 +125,7 @@ h1 {
     box-shadow: 0 4px 8px rgba(255, 152, 0, 0.4);
     width: 100%;
     max-width: 350px;
-    align-self: center; /* จัดให้อยู่ตรงกลางแนวนอนเมื่อ Flex Direction เป็น Column */
+    align-self: center; 
 }
 
 .showCompareSummaryButton:hover {
@@ -121,7 +133,7 @@ h1 {
     box-shadow: 0 6px 10px rgba(255, 152, 0, 0.6);
 }
 
-/* --- 3. Food Grid & Card (Mobile Default: Single Column) --- */
+/* --- 3. Food Grid & Card --- */
 .foodGrid {
     display: grid;
     grid-template-columns: 1fr; 
@@ -131,10 +143,11 @@ h1 {
 
 .foodCard {
     padding: 20px;
-    border-radius: var(--border-radius-card); /* ใช้รัศมี Card */
+    border-radius: var(--border-radius-card); 
     box-shadow: var(--shadow-soft);
     transition: all 0.3s ease;
     border: 1px solid #f0f0f0;
+    background-color: #ffffff;
 }
 
 .foodCard:hover {
@@ -147,60 +160,51 @@ h1 {
     box-shadow: 0 0 20px rgba(0, 123, 255, 0.4);
 }
 
-.dryType {
-    border-top: 5px solid #ffcc80;
-}
-
-.wetType {
-    border-top: 5px solid #80deea;
-}
+.dryType { border-top: 5px solid #ffcc80; }
+.wetType { border-top: 5px solid #80deea; }
 
 .cardHeader {
     text-align: center;
     margin-bottom: 15px;
 }
 
-.cardHeader h2 {
-    color: #2c3e50;
-    margin-top: 5px;
-}
-
-/* --- Image & Nutrition --- */
-
-.foodImageContainer {
-    margin-bottom: 10px;
-}
-
-.foodImage {
-    max-width: 120px;
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+/* 🛑 ปรับปรุงการแสดงผลโภชนาการใน Card */
+.nutritionList {
+    list-style: none;
+    padding: 0;
 }
 
 .nutritionItem {
+    display: flex;
+    justify-content: space-between;
     padding: 10px 0;
     border-bottom: 1px dashed #e0e0e0;
     font-size: 0.95em;
 }
 
-.nutritionItem span:last-child {
-    font-weight: 600;
-    color: var(--primary-color); 
+.nutritionItem:last-child {
+    border-bottom: none;
 }
 
-/* --- Compare Button (โค้งมนเหมือน Filter) --- */
+.nutritionItem span:first-child {
+    font-weight: 500;
+    color: #444;
+}
+
+/* --- Compare Button --- */
 .compareButton {
     padding: 10px 20px; 
     font-size: 0.9em;
     margin-top: 15px;
-    border-radius: var(--border-radius-button); /* โค้งมนมาก */
+    border-radius: var(--border-radius-button); 
     border: 1px solid #c8d4e0; 
     background-color: white; 
     color: #333;
     cursor: pointer;
     transition: all 0.2s ease;
     font-weight: 500;
+    width: 100%;
+    display: block;
 }
 
 .compareButton:hover {
@@ -208,9 +212,9 @@ h1 {
 }
 
 .compareActive {
-    background-color: #28a745; /* สีเขียว */
+    background-color: var(--success-color); 
     color: white;
-    border-color: #28a745; 
+    border-color: var(--success-color); 
     font-weight: 600;
 }
 
@@ -223,7 +227,7 @@ h1 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(44, 62, 80, 0.8); /* มืดและดูพรีเมี่ยมขึ้น */
+    background-color: rgba(44, 62, 80, 0.8); 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -236,13 +240,14 @@ h1 {
     width: 95%;
     max-width: 1000px;
     max-height: 95vh;
-    padding: 35px 20px 20px; /* เพิ่ม padding ด้านบน */
+    padding: 35px 20px 20px; 
     border-radius: var(--border-radius-card); 
     box-shadow: var(--shadow-lift);
     overflow-y: auto; 
 }
 
 .closeModalX {
+    position: absolute;
     top: 15px; 
     right: 15px; 
     background: #eef2f5;
@@ -256,6 +261,9 @@ h1 {
     cursor: pointer;
     transition: background-color 0.2s;
     z-index: 1010;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .closeModalX:hover {
@@ -266,7 +274,7 @@ h1 {
 .comparisonTableContainer {
     overflow-x: auto;
     margin-top: 20px;
-    border: 1px solid #e0e0e0; /* เพิ่มเส้นขอบรอบตาราง */
+    border: 1px solid #e0e0e0; 
     border-radius: 8px;
 }
 
@@ -288,9 +296,14 @@ h1 {
     background-color: #eef2f5;
     font-weight: 600;
     color: #4a4a4a;
-    position: sticky; /* หัวตารางติดอยู่ด้านบน */
+    position: sticky; 
     top: 0;
     z-index: 10;
+}
+
+.compareHeader {
+    color: #333;
+    font-size: 0.9em;
 }
 
 .tableKey {
@@ -306,6 +319,13 @@ h1 {
     color: var(--primary-color);
 }
 
+.dmbLabel {
+    display: block;
+    font-size: 0.7em;
+    font-weight: normal;
+    color: #888;
+}
+
 /* --- Modal Control Buttons --- */
 .modalControlButtons {
     flex-direction: column; 
@@ -313,6 +333,7 @@ h1 {
     margin-top: 25px;
     padding-top: 20px;
     border-top: 1px solid #e0e0e0; 
+    display: flex;
 }
 
 .clearComparisonButton,
@@ -352,23 +373,36 @@ h1 {
     .container {
         padding: 30px 20px;
     }
+    
+    .pageTitle { 
+        font-size: 2.5em; 
+    }
 
     /* Filter Controls */
     .filterControls {
         flex-direction: row;
-        flex-wrap: wrap; /* อนุญาตให้หักบรรทัดหากมีหลาย Filter */
+        flex-wrap: wrap; 
         gap: 20px;
         padding: 20px;
     }
     
     .filterGroup {
-        flex-direction: column;
+        /* กลับไปเป็น Column ในจอใหญ่เพื่อให้ Label อยู่ด้านบน */
+        flex-direction: column; 
         align-items: center;
-        width: auto; /* ไม่ต้องเต็ม 100% */
+        width: auto; 
     }
 
     .filterButton, .filterSelectBrand {
         font-size: 0.9em;
+    }
+
+    /* Summary Button Container */
+    .summaryButtonContainer {
+        /* ปุ่ม Summary จะอยู่ในบรรทัดเดียวกับ Filter บนจอใหญ่ */
+        width: auto; 
+        margin-left: auto; /* ดันไปขวาสุด */
+        align-self: center;
     }
 
     .showCompareSummaryButton {
