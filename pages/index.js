@@ -226,6 +226,23 @@ const Home = () => {
             {/* 3. ส่วนควบคุม Filter (เพิ่ม Brand Filter) */}
             <div className={styles.filterControls}>
                 
+                //// เพิ่มปุ่ม "แสดงตารางเปรียบเทียบ" (Fix)
+                {comparingItems.length > 0 && (
+                    <div style={{ textAlign: 'center', margin: '20px 0' }}>
+                        <button
+                            onClick={() => { 
+                                /* Logic: ให้ Modal แสดงอยู่แล้ว แต่ถ้าอยากให้มันเลื่อนไปที่ Modal 
+                                   หรือเปิด Modal เต็มหน้าจอ อาจต้องเพิ่ม State สำหรับ Modal */ 
+                                alert('ตารางเปรียบเทียบแสดงอยู่ด้านบนสุดของหน้าต่าง'); 
+                            }} 
+                            className={styles.showCompareSummaryButton} // กำหนด CSS สำหรับปุ่มนี้
+                        >
+                            ดูตารางเปรียบเทียบ ({comparingItems.length} / 4)
+                        </button>
+                    </div>
+                )}
+
+
                 {/* Filter แบรนด์ (ใช้ Select) */}
                 <div className={styles.filterGroup}>
                     <label>แบรนด์:</label>
