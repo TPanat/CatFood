@@ -226,7 +226,7 @@ const Home = () => {
             {/* 3. ส่วนควบคุม Filter (เพิ่ม Brand Filter) */}
             <div className={styles.filterControls}>
                 
-                //// เพิ่มปุ่ม "แสดงตารางเปรียบเทียบ" (Fix)
+                {/*  เพิ่มปุ่ม "แสดงตารางเปรียบเทียบ" (Fix) */}
                 {comparingItems.length > 0 && (
                     <div style={{ textAlign: 'center', margin: '20px 0' }}>
                         <button
