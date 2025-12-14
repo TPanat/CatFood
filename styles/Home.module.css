@@ -3,8 +3,8 @@
     --secondary-color: #0056b3; /* สีเข้มขึ้น */
     --success-color: #28a745; /* สีเน้น (เขียว) */
     --danger-color: #d32f2f; /* สีความชื้น/อันตราย (แดง) */
-    --border-radius: 8px; /* ขอบมนมาตรฐาน */
-    --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --border-radius: 6px; /* ขอบมนมาตรฐานสำหรับ Card/Button เดิม */
+    --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1); /* เงาเดิม */
 }
 
 .container {
@@ -23,7 +23,7 @@
     font-weight: 800;
 }
 
-/* --- 1. Filter Controls --- */
+/* --- 1. Filter Controls (คงดีไซน์เดิม) --- */
 
 .filterControls {
     display: flex;
@@ -55,13 +55,13 @@
     gap: 8px;
 }
 
-/* ปุ่ม Filter */
+/* ปุ่ม Filter และ Sort Select (ใช้ขอบมนเล็กน้อยตามเดิม) */
 .filterButton {
     background-color: #eee;
     color: #333;
     padding: 8px 15px;
     border: 1px solid #ddd;
-    border-radius: 6px; /* ขอบมนปุ่ม */
+    border-radius: var(--border-radius);
     cursor: pointer;
     font-size: 0.9em;
     transition: background-color 0.2s, border-color 0.2s;
@@ -74,11 +74,10 @@
     border-color: var(--secondary-color);
 }
 
-/* ปุ่มจัดเรียง */
 .sortSelect {
     padding: 8px 15px;
     border: 1px solid #ddd;
-    border-radius: 6px;
+    border-radius: var(--border-radius);
     background-color: #fff;
     cursor: pointer;
     font-size: 0.9em;
@@ -95,7 +94,7 @@
 }
 
 
-/* Dropdown แบรนด์ */
+/* Dropdown แบรนด์ (ใช้ดีไซน์เดิม) */
 .brandDropdownContainer {
     position: relative;
     z-index: 10;
@@ -108,7 +107,7 @@
     background-color: #fff;
     border: 1px solid #ddd;
     padding: 8px 15px;
-    border-radius: 6px;
+    border-radius: var(--border-radius);
     cursor: pointer;
     display: flex;
     justify-content: space-between;
@@ -122,7 +121,7 @@
     left: 0;
     background-color: white;
     border: 1px solid #ddd;
-    border-radius: 6px;
+    border-radius: var(--border-radius);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     max-height: 200px;
     overflow-y: auto;
@@ -169,7 +168,7 @@
 }
 
 
-/* --- 2. Food Grid & Card --- */
+/* --- 2. Food Grid & Card (คงดีไซน์เดิม) --- */
 
 .foodGrid {
     display: grid;
@@ -180,7 +179,7 @@
 .foodCard {
     background-color: white;
     padding: 20px;
-    /* 🛑 เพิ่มขอบมนและเงาให้สวยงาม */
+    /* คงขอบมนและเงาเดิม */
     border-radius: var(--border-radius); 
     box-shadow: var(--shadow-light);
     border: 1px solid #e0e0e0;
@@ -190,8 +189,9 @@
 }
 
 .foodCard:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    /* คง hover effect เดิม */
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
 }
 
 .foodCard h2 {
@@ -221,11 +221,11 @@
 
 /* เน้นสีตามประเภทอาหาร */
 .dryType {
-    border-top: 4px solid #ff9800; /* สีส้มสำหรับ Dry */
+    border-top: 4px solid #ff9800; 
 }
 
 .wetType {
-    border-top: 4px solid #03a9f4; /* สีฟ้าสำหรับ Wet */
+    border-top: 4px solid #03a9f4; 
 }
 
 /* สารอาหาร List */
@@ -233,7 +233,7 @@
     list-style: none;
     padding: 0;
     margin: 15px 0 20px 0;
-    flex-grow: 1; /* ทำให้ส่วนนี้ขยายได้ */
+    flex-grow: 1;
 }
 
 .nutritionItem {
@@ -255,11 +255,10 @@
     color: white;
     padding: 10px 15px;
     border: none;
-    /* 🛑 ขอบมนที่ปุ่ม */
-    border-radius: 6px; 
+    border-radius: var(--border-radius); 
     cursor: pointer;
     font-weight: 600;
-    margin-top: auto; /* จัดให้อยู่ด้านล่างสุด */
+    margin-top: auto; 
     transition: background-color 0.2s;
 }
 
@@ -283,11 +282,11 @@
 }
 
 .showCompareSummaryButton {
-    background-color: var(--danger-color); /* ใช้สีแดงเพื่อดึงดูดความสนใจ */
+    background-color: var(--danger-color); 
     color: white;
     padding: 12px 25px;
     border: none;
-    /* 🛑 ขอบมนและเงาสำหรับปุ่มลอย */
+    /* ขอบมนและเงาสำหรับปุ่มลอย */
     border-radius: 30px; 
     box-shadow: 0 4px 15px rgba(211, 47, 47, 0.4);
     cursor: pointer;
@@ -301,7 +300,7 @@
 }
 
 
-/* --- 3. Comparison Modal --- */
+/* --- 3. Comparison Modal (ปรับปรุงให้ Modern ตามที่เสนอ) --- */
 
 .comparisonModalOverlay {
     position: fixed;
@@ -322,9 +321,9 @@
 .comparisonModal {
     background-color: white;
     padding: 30px;
-    /* 🛑 ขอบมนและเงาที่สวยงาม */
+    /* 🛑 ขอบมน 12px และเงาที่โดดเด่น */
     border-radius: 12px; 
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); 
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25); 
     max-width: 90%;
     width: 900px;
     max-height: 90vh;
@@ -353,7 +352,7 @@
     color: #555;
     width: 40px;
     height: 40px;
-    border-radius: 50%;
+    border-radius: 50%; /* ทำให้เป็นวงกลม */
     transition: background-color 0.2s;
 }
 
@@ -366,7 +365,7 @@
     width: 100%;
     overflow-x: auto; 
     margin-bottom: 20px;
-    /* 🛑 ขอบมนและกรอบรอบตาราง */
+    /* 🛑 ขอบมน 8px และกรอบรอบตาราง */
     border-radius: 8px; 
     border: 1px solid #ddd; 
 }
@@ -414,8 +413,7 @@
 .highlightMaxValue {
     color: var(--success-color);
     font-weight: 700;
-    /* 🛑 พื้นหลังเน้นค่าสูงสุด */
-    background-color: #e6ffed !important; 
+    background-color: #e6ffed !important; /* พื้นหลังสีเขียวอ่อน */
 }
 
 .dmbLabel {
@@ -438,7 +436,7 @@
     color: white;
     padding: 10px 20px;
     border: none;
-    /* 🛑 ขอบมนที่ปุ่ม */
+    /* 🛑 ขอบมน 8px */
     border-radius: 8px; 
     cursor: pointer;
     font-weight: 600;
@@ -454,7 +452,7 @@
     color: white;
     padding: 10px 20px;
     border: none;
-    /* 🛑 ขอบมนที่ปุ่ม */
+    /* 🛑 ขอบมน 8px */
     border-radius: 8px; 
     cursor: pointer;
     font-weight: 600;
@@ -466,7 +464,7 @@
 }
 
 
-/* --- Responsive Adjustments (ไม่บังคับ แต่ควรมี) --- */
+/* --- Responsive Adjustments --- */
 @media (max-width: 768px) {
     .pageTitle {
         font-size: 1.8em;
