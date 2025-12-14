@@ -1,7 +1,6 @@
-// pages/index.js (FINALIZED CODE WITH MULTI-SELECT FILTERS & MAX VALUE HIGHLIGHT)
+// pages/index.js (FINALIZED CODE WITH MULTI-SELECT DROPDOWN FOR BRAND)
 import Head from 'next/head';
 import { useState, useMemo } from 'react';
-// 🟢 การเรียกใช้ Data จากไฟล์ภายนอก
 import { catFoodData } from '../data/catFoodData';
 import styles from '../styles/Home.module.css';
 
@@ -103,47 +102,43 @@ const FoodCard = ({ food, isComparing, toggleComparison }) => {
 // --- สิ้นสุด FoodCard Component ---
 
 
-// --- Comparison Modal Component ---
+// --- Comparison Modal Component (โค้ดเดิม) ---
 const ComparisonModal = ({ comparingItems, onClose, onClear }) => {
  
-  // ฟังก์ชันสำหรับเน้นค่า DMB ในตาราง (เพื่อความสม่ำเสมอ)
+  // ฟังก์ชันสำหรับคำนวณ DMB หรือ As Fed (เพื่อความสม่ำเสมอ)
   const getDMBValue = (item, key) => {
     const value = item.nutrition[key];
     if (key === 'protein' || key === 'fat' || key === 'fiber') {
       return calculateDMB(value, item.nutrition.moisture) + '%';
     }
-    // เพิ่ม % ให้ค่าอื่นที่ไม่ใช่ DMB
     return value + (key !== 'taurine' ? '%' : '');
   };
 
   // แถวที่ต้องการแสดงในตาราง
   const tableKeys = ['protein', 'fat', 'fiber', 'moisture', 'taurine'];
 
-    // 🟢 NEW: useMemo เพื่อหาค่าสูงสุดของแต่ละสารอาหารที่เลือกมาเปรียบเทียบ
+    // useMemo เพื่อหาค่าสูงสุดของแต่ละสารอาหาร
     const maxValues = useMemo(() => {
         const maxMap = {};
         tableKeys.forEach(key => {
-            // ดึงค่า DMB (หรือ As Fed) ของทุกคนมาเปรียบเทียบ
             const values = comparingItems.map(item => {
                 const rawValue = getDMBValue(item, key).replace('%', '');
                 return parseFloat(rawValue);
-            }).filter(val => !isNaN(val)); // กรองค่าที่คำนวณไม่ได้
+            }).filter(val => !isNaN(val));
             
             if (values.length > 0) {
-                // เราเน้นค่าสูงสุดสำหรับทุกคีย์
                 maxMap[key] = Math.max(...values);
             }
         });
         return maxMap;
     }, [comparingItems]);
     
-    // 🟢 NEW: ฟังก์ชันเช็คว่าค่านั้นคือค่าสูงสุด (และไม่ซ้ำกับค่าอื่น)
+    // ฟังก์ชันเช็คว่าค่านั้นคือค่าสูงสุด (และไม่ซ้ำกับค่าอื่น)
     const isMaxValue = (item, key) => {
         const currentValueString = getDMBValue(item, key).replace('%', '');
         const currentValue = parseFloat(currentValueString);
         
         if (maxValues[key] !== undefined && currentValue === maxValues[key] && maxValues[key] > 0) {
-            // นับจำนวนรายการที่มีค่าเท่ากับค่าสูงสุด (เพื่อไม่ให้ highlight เมื่อค่าซ้ำ)
             const count = comparingItems.filter(i => {
                 const val = parseFloat(getDMBValue(i, key).replace('%', ''));
                 return val === maxValues[key];
@@ -191,7 +186,6 @@ const ComparisonModal = ({ comparingItems, onClose, onClear }) => {
                                         return (
                         <td 
                                                 key={item.id} 
-                                                // 🟢 ใช้คลาส Highlight
                                                 className={`${styles.tableValue} ${isHighlighted ? styles.highlightMaxValue : ''}`}
                                             >
                       {getDMBValue(item, key)}
@@ -236,29 +230,34 @@ const ComparisonModal = ({ comparingItems, onClose, onClear }) => {
 
 // Component หลัก
 const Home = () => {
-  // 1. 🛑 State สำหรับ Filter เปลี่ยนเป็น Array สำหรับ Multi-Select
+  // 1. State สำหรับ Filter
   const [filterType, setFilterType] = useState([]);
   const [filterAge, setFilterAge] = useState([]);
   const [filterBrand, setFilterBrand] = useState([]);
  
+  // 🛑 NEW: State สำหรับควบคุมการเปิด/ปิด Dropdown
+  const [isBrandDropdownOpen, setIsBrandDropdownOpen] = useState(false);
+
   // 2. State สำหรับ Comparison (เหมือนเดิม)
   const [comparisonList, setComparisonList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // ตัวเลือกสำหรับ Filter (ลบ 'All' ออก เพราะตอนนี้การไม่เลือกอะไรเลย = All)
+  // ตัวเลือกสำหรับ Filter
   const typeOptions = ['Dry', 'Wet', 'Freeze-Dried', 'Prescription'];
   const ageOptions = ['Kitten', 'Adult', 'Senior', 'All Life Stages', 'Mother & Baby'];
   const brandOptions = [...new Set(catFoodData.map(f => f.brand))].sort();
 
-    // 🟢 ฟังก์ชันใหม่: จัดการการเลือก/ยกเลิกการเลือกใน Array
+    // 🟢 ฟังก์ชัน: จัดการการเลือก/ยกเลิกการเลือกใน Array
     const toggleFilter = (currentFilters, setFilterFunction, value) => {
-        if (currentFilters.includes(value)) {
-            // ยกเลิกการเลือก
-            setFilterFunction(currentFilters.filter(item => item !== value));
-        } else {
-            // เลือกเพิ่ม
-            setFilterFunction([...currentFilters, value]);
-        }
+        setFilterFunction(prevFilters => {
+            if (prevFilters.includes(value)) {
+                // ยกเลิกการเลือก
+                return prevFilters.filter(item => item !== value);
+            } else {
+                // เลือกเพิ่ม
+                return [...prevFilters, value];
+            }
+        });
     };
 
   // 3. ฟังก์ชันจัดการการเลือกเปรียบเทียบ (เหมือนเดิม)
@@ -277,11 +276,9 @@ const Home = () => {
 
   const isComparing = (id) => comparisonList.includes(id);
 
-  // 4. 🛑 useMemo แก้ไขให้รองรับ Multi-Select
+  // 4. useMemo เพื่อกรองข้อมูล (รองรับ Multi-Select)
   const filteredFood = useMemo(() => {
     return catFoodData.filter(food => {
-      // ถ้า Array ว่าง (filter.length === 0) ถือว่า Match ทั้งหมด
-            // ถ้า Array ไม่ว่าง (filter.length > 0) ต้องมีอย่างน้อย 1 ตัวเลือกที่ถูกเลือก ตรงกับข้อมูลอาหาร (use .some)
       const typeMatch = filterType.length === 0 || filterType.some(ft => food.type.includes(ft));
       const ageMatch = filterAge.length === 0 || filterAge.some(fa => food.age.includes(fa));
       const brandMatch = filterBrand.length === 0 || filterBrand.some(fb => food.brand === fb);
@@ -290,12 +287,12 @@ const Home = () => {
     });
   }, [filterType, filterAge, filterBrand]);
 
-  // 5. ดึงข้อมูลสินค้าที่ถูกเลือกสำหรับ Comparison Modal (เหมือนเดิม)
+  // 5. ดึงข้อมูลสินค้าที่ถูกเลือกสำหรับ Comparison Modal
   const comparingItems = useMemo(() => {
     return catFoodData.filter(food => comparisonList.includes(food.id));
   }, [comparisonList]);
  
-  // ฟังก์ชันสำหรับล้างรายการทั้งหมด และปิด Modal (เหมือนเดิม)
+  // ฟังก์ชันสำหรับล้างรายการทั้งหมด และปิด Modal
   const handleClearComparison = () => {
     setComparisonList([]);
     setIsModalOpen(false);
@@ -316,23 +313,55 @@ const Home = () => {
       {/* --- Filter Controls --- */}
       <div className={styles.filterControls}>
 
-        {/* 🛑 Filter แบรนด์ (Button Group, ใช้ toggleFilter) */}
+        {/* 🛑 Filter แบรนด์ (Multi-select Dropdown) */}
         <div className={styles.filterGroup}>
           <label>แบรนด์:</label>
-          <div className={styles.buttonGroup}>
-            {brandOptions.map(option => (
-              <button
-                key={option}
-                className={`${styles.filterButton} ${filterBrand.includes(option) ? styles.active : ''}`}
-                onClick={() => toggleFilter(filterBrand, setFilterBrand, option)}
-              >
-                {option}
-              </button>
-            ))}
+         
+          <div className={styles.brandDropdownContainer}>
+            {/* ปุ่มสำหรับเปิด/ปิด Dropdown */}
+            <button
+              className={`${styles.dropdownToggle} ${isBrandDropdownOpen ? styles.dropdownActive : ''}`}
+              onClick={() => setIsBrandDropdownOpen(!isBrandDropdownOpen)}
+            >
+              เลือกแบรนด์ ({filterBrand.length} รายการ) {isBrandDropdownOpen ? '▲' : '▼'}
+            </button>
+
+            {/* Dropdown List */}
+            {isBrandDropdownOpen && (
+              <div className={styles.dropdownMenu}>
+                {brandOptions.map(option => (
+                  <div
+                    key={option}
+                    className={`${styles.dropdownItem} ${filterBrand.includes(option) ? styles.dropdownActiveItem : ''}`}
+                    onClick={() => toggleFilter(filterBrand, setFilterBrand, option)}
+                  >
+                    {filterBrand.includes(option) ? '✅' : '⬜'} {option}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* แสดง Brand ที่ถูกเลือกเป็น Tag */}
+            {filterBrand.length > 0 && (
+              <div className={styles.selectedTags}>
+                {filterBrand.map(brand => (
+                  <span
+                    key={brand}
+                    className={styles.brandTag}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFilter(filterBrand, setFilterBrand, brand);
+                    }}
+                  >
+                    {brand} &times;
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* 🛑 Filter ประเภทอาหาร (Button Group, ใช้ toggleFilter) */}
+        {/* Filter ประเภทอาหาร (Button Group เหมือนเดิม) */}
         <div className={styles.filterGroup}>
           <label>ประเภท:</label>
           <div className={styles.buttonGroup}>
@@ -348,7 +377,7 @@ const Home = () => {
           </div>
         </div>
 
-        {/* 🛑 Filter อายุแมว (Button Group, ใช้ toggleFilter) */}
+        {/* Filter อายุแมว (Button Group เหมือนเดิม) */}
         <div className={styles.filterGroup}>
           <label>อายุแมว:</label>
           <div className={styles.buttonGroup}>

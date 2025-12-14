@@ -20,7 +20,6 @@
   margin: 0 auto;
 }
 
-/* 🟢 Page Title (ใช้แทน h1 โดยตรง) */
 .pageTitle {
   color: #2c3e50;
   font-weight: 700;
@@ -46,27 +45,25 @@
 
 .filterGroup {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column; /* 🛑 Column สำหรับ Mobile */
+  justify-content: flex-start;
+  align-items: flex-start;
   width: 100%;
 }
 
 .filterGroup label {
   font-weight: 600;
   margin-right: 10px;
+  margin-bottom: 5px; /* 🛑 เพิ่มระยะห่างด้านล่าง */
   color: #4a4a4a;
   flex-shrink: 0;
 }
 
-/* --- Button Group & Select Styles --- */
-
-/* 🛑 ลบ .filterSelectBrand ออกไป เหลือแค่ .buttonGroup */
+/* --- Button Group Styles (สำหรับ Type/Age) --- */
 .buttonGroup {
     flex-grow: 1;
     display: flex;
-    /* 🟢 เพิ่ม flex-wrap: wrap เพื่อให้ปุ่มหลายปุ่มลงบรรทัดใหม่ได้ใน Mobile */
-    flex-wrap: wrap; 
+    flex-wrap: wrap; /* ให้ปุ่มหลายปุ่มลงบรรทัดใหม่ได้ใน Mobile */
     border: 1px solid #c8d4e0;
     border-radius: var(--border-radius-button);
     overflow: hidden;
@@ -82,8 +79,7 @@
   font-weight: 500;
   transition: all 0.2s ease;
   color: #666;
-  /* 🛑 ให้ปุ่มมีพื้นที่เท่าๆ กัน แต่ให้บรรทัดใหม่ได้ */
-    flex: 1 1 auto; 
+  flex: 1 1 auto; 
   white-space: nowrap;
 }
 
@@ -97,25 +93,113 @@
   font-weight: 600;
 }
 
-/* 🛑 โค้ด .filterSelectBrand ที่เคยมี ถูกลบออก */
+
+/* --- NEW: Brand Multi-select Dropdown Styles --- */
+
+.brandDropdownContainer {
+    position: relative;
+    width: 100%;
+    /* จัดการให้ Container มีพื้นที่เท่าๆ กับ Button Group อื่นๆ */
+    min-width: 200px; 
+}
+
+.dropdownToggle {
+    /* ใช้สไตล์เดียวกับปุ่ม Filter อื่นๆ */
+    padding: 8px 15px;
+    border: 1px solid #c8d4e0;
+    border-radius: var(--border-radius-button);
+    background-color: white;
+    cursor: pointer;
+    font-size: 0.85em;
+    font-weight: 500;
+    width: 100%;
+    text-align: left;
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dropdownToggle:hover {
+    border-color: var(--primary-color);
+}
+
+.dropdownActive {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
+
+.dropdownMenu {
+    position: absolute;
+    top: 100%; /* อยู่ใต้ปุ่ม Toggle */
+    left: 0;
+    z-index: 50;
+    width: 100%;
+    max-height: 250px; /* จำกัดความสูงสำหรับ Scroll */
+    overflow-y: auto;
+    background-color: white;
+    border: 1px solid #c8d4e0;
+    border-radius: var(--border-radius-card);
+    box-shadow: var(--shadow-lift);
+    margin-top: 5px;
+    padding: 5px 0;
+}
+
+.dropdownItem {
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 0.9em;
+    color: #333;
+    transition: background-color 0.1s;
+}
+
+.dropdownItem:hover {
+    background-color: #f0f0f0;
+}
+
+.dropdownActiveItem {
+    background-color: #e6f0ff; /* สีอ่อนๆ เมื่อถูกเลือก */
+    font-weight: 600;
+}
+
+/* --- Selected Tags Styles --- */
+
+.selectedTags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+    width: 100%; /* ให้เต็มความกว้าง */
+}
+
+.brandTag {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.brandTag:hover {
+    background-color: #0056b3;
+}
 
 
 /* --- Summary Button Container --- */
 .floatingCompareWrapper {
-  position: fixed; /* ทำให้ปุ่มลอยตามหน้าจอ */
-  bottom: 20px; /* ระยะห่างจากด้านล่าง */
-  right: 20px; /* ระยะห่างจากด้านขวา */
-  z-index: 990; /* ให้ปุ่มอยู่ด้านบนสุด (ต่ำกว่า Modal) */
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 990;
   width: auto;
-  /* ในโหมดมือถืออาจจะต้องการให้ปุ่มใหญ่ขึ้นและอยู่กึ่งกลางด้านล่าง */
   left: 50%;
   transform: translateX(-50%);
   max-width: 90%;
 }
 
-/* --- Summary Button --- */
 .showCompareSummaryButton {
-  /* ใช้สไตล์เดิม แต่กำหนดให้ขนาดเหมาะกับการลอยตัว */
   padding: 12px 25px;
   background-color: var(--accent-color);
   color: white;
@@ -125,10 +209,8 @@
   font-weight: bold;
   cursor: pointer;
   box-shadow: 0 4px 8px rgba(255, 152, 0, 0.4);
-  width: 100%; /* เต็มความกว้างของ wrapper (ในโหมดมือถือ) */
-  max-width: 350px; /* จำกัดความกว้างสูงสุด */
- 
-  /* 🛑 เพิ่ม transition เพื่อให้ปุ่มสวยงามขึ้นเมื่อปรากฏ/หายไป */
+  width: 100%;
+  max-width: 350px;
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
@@ -172,7 +254,6 @@
   margin-bottom: 15px;
 }
 
-/* 🟢 แก้ไข: จัดรูปภาพให้อยู่กึ่งกลาง Card */
 .foodImageContainer {
   margin-bottom: 10px;
   text-align: center;
@@ -198,16 +279,7 @@
   font-size: 0.95em;
 }
 
-.nutritionItem:last-child {
-  border-bottom: none;
-}
-
-.nutritionItem span:first-child {
-  font-weight: 500;
-  color: #444;
-}
-
-/* --- Compare Button --- */
+/* --- Compare Button (เหมือนเดิม) --- */
 .compareButton {
   padding: 10px 20px;
   font-size: 0.9em;
@@ -223,10 +295,6 @@
   display: block;
 }
 
-.compareButton:hover {
-  background-color: #f0f0f0;
-}
-
 .compareActive {
   background-color: var(--success-color);
   color: white;
@@ -236,7 +304,6 @@
 
 
 /* --- 4. Comparison Modal --- */
-
 .comparisonModalOverlay {
   position: fixed;
   top: 0;
@@ -262,31 +329,7 @@
   overflow-y: auto;
 }
 
-.closeModalX {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: #eef2f5;
-  border: none;
-  border-radius: 50%;
-  width: 35px;
-  height: 35px;
-  font-size: 1.1em;
-  font-weight: bold;
-  color: #333;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  z-index: 1010;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.closeModalX:hover {
-  background-color: #c8d4e0;
-}
-
-/* --- Table Styles --- */
+/* --- Table Styles (เหมือนเดิม) --- */
 .comparisonTableContainer {
   overflow-x: auto;
   margin-top: 20px;
@@ -301,60 +344,16 @@
   font-size: 0.9em;
 }
 
-.comparisonTable th,
-.comparisonTable td {
-  border: 1px solid #f0f0f0;
-  padding: 10px 8px;
-  text-align: center;
-}
-
-.comparisonTable th {
-  background-color: #eef2f5;
-  font-weight: 600;
-  color: #4a4a4a;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-.compareHeader {
-  color: #333;
-  font-size: 0.9em;
-}
-
-.tableKey {
-  text-align: left !important;
-  background-color: #ffffff;
-  font-weight: 500;
-  min-width: 120px;
-  color: #333;
-}
-
-.tableValue {
-  font-weight: 600;
-  color: var(--primary-color);
-}
-
-.dmbLabel {
-  display: block;
-  font-size: 0.7em;
-  font-weight: normal;
-  color: #888;
-}
-
-/* 🟢 NEW: Highlight Max Value */
 .highlightMaxValue {
-  /* ใช้สีเขียวหรือสีเด่นเพื่อให้รู้ว่าเป็นค่าสูงสุด */
-  background-color: #e6ffe6; /* พื้นหลังเขียวอ่อน */
-  color: var(--success-color); /* สีเขียวเข้ม */
+  background-color: #e6ffe6;
+  color: var(--success-color);
   font-weight: 700;
-  font-size: 1.05em; /* ขยายเล็กน้อย */
+  font-size: 1.05em;
   position: relative;
 }
 
-/* เพิ่มเครื่องหมาย */
 .highlightMaxValue::after {
-  content: '★'; /* สัญลักษณ์ดาว */
+  content: '★';
   color: gold;
   position: absolute;
   top: -5px;
@@ -363,45 +362,6 @@
   line-height: 1;
 }
 
-/* --- Modal Control Buttons --- */
-.modalControlButtons {
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 25px;
-  padding-top: 20px;
-  border-top: 1px solid #e0e0e0;
-  display: flex;
-}
-
-.clearComparisonButton,
-.continueCompareButton {
-  padding: 12px 20px;
-  border: none;
-  border-radius: var(--border-radius-button);
-  cursor: pointer;
-  font-weight: 600;
-  flex-grow: 1;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.continueCompareButton {
-  background-color: var(--primary-color);
-  color: white;
-}
-
-.continueCompareButton:hover {
-  background-color: #0056b3;
-}
-
-.clearComparisonButton {
-  background-color: #dc3545; /* สีแดง */
-  color: white;
-}
-
-.clearComparisonButton:hover {
-  background-color: #c82333;
-}
 
 /* --- 5. Media Queries for Tablet/Desktop (>= 768px) --- */
 
@@ -429,15 +389,19 @@
     width: auto;
   }
     
-    /* 🛑 ปรับ Button Group สำหรับ Desktop: กลับไปจัดแถวเดียว */
+    /* Brand Dropdown ใน Desktop */
+    .brandDropdownContainer {
+        width: 180px; /* กำหนดความกว้างที่เหมาะสม */
+    }
+    
+    /* Button Group ใน Desktop (ให้จัดเรียงสวยงาม) */
     .buttonGroup {
         flex-wrap: nowrap;
-        border-radius: var(--border-radius-button); /* ใช้ขอบโค้งเหมือนเดิม */
     }
 
   .filterButton {
     font-size: 0.9em;
-        flex: 1 1 auto; /* ให้มีขนาดเท่ากันใน Desktop */
+        flex: 1 1 auto;
   }
 
   /* 🛑 ปรับ Floating Button สำหรับ Desktop */
@@ -445,8 +409,8 @@
     position: fixed;
     bottom: 30px;
     right: 30px;
-    left: auto; /* ยกเลิกการจัดกึ่งกลางด้านล่าง */
-    transform: none; /* ยกเลิกการ translate */
+    left: auto;
+    transform: none;
     max-width: none;
     width: auto;
   }
@@ -463,10 +427,6 @@
     gap: 30px;
     margin-top: 35px;
   }
- 
-  .foodImage {
-    max-width: 150px;
-  }
 
   .modalControlButtons {
     flex-direction: row;
@@ -474,6 +434,4 @@
     margin-top: 30px;
     padding-top: 25px;
   }
-  
-    /* 🛑 ลบ CSS ที่ซ้ำกันใน Media Query ออกไป (เช่น .highlightMaxValue) */
 }
