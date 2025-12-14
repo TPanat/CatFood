@@ -45,7 +45,7 @@
 
 .filterGroup {
   display: flex;
-  flex-direction: column; /* 🛑 Column สำหรับ Mobile */
+  flex-direction: column; /* Column สำหรับ Mobile */
   justify-content: flex-start;
   align-items: flex-start;
   width: 100%;
@@ -54,20 +54,21 @@
 .filterGroup label {
   font-weight: 600;
   margin-right: 10px;
-  margin-bottom: 5px; /* 🛑 เพิ่มระยะห่างด้านล่าง */
+  margin-bottom: 5px; 
   color: #4a4a4a;
   flex-shrink: 0;
 }
 
-/* --- Button Group Styles (สำหรับ Type/Age) --- */
+/* --- Button Group Styles (สำหรับ Type/Age/Sorting) --- */
 .buttonGroup {
     flex-grow: 1;
     display: flex;
-    flex-wrap: wrap; /* ให้ปุ่มหลายปุ่มลงบรรทัดใหม่ได้ใน Mobile */
+    flex-wrap: wrap; 
     border: 1px solid #c8d4e0;
     border-radius: var(--border-radius-button);
     overflow: hidden;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    width: 100%; /* สำคัญสำหรับ mobile */
 }
 
 .filterButton {
@@ -90,21 +91,20 @@
 .filterButton.active {
   background-color: var(--primary-color);
   color: white;
+  border-color: var(--primary-color);
   font-weight: 600;
 }
 
 
-/* --- NEW: Brand Multi-select Dropdown Styles --- */
+/* --- Brand Multi-select Dropdown Styles --- */
 
 .brandDropdownContainer {
     position: relative;
     width: 100%;
-    /* จัดการให้ Container มีพื้นที่เท่าๆ กับ Button Group อื่นๆ */
     min-width: 200px; 
 }
 
 .dropdownToggle {
-    /* ใช้สไตล์เดียวกับปุ่ม Filter อื่นๆ */
     padding: 8px 15px;
     border: 1px solid #c8d4e0;
     border-radius: var(--border-radius-button);
@@ -131,11 +131,11 @@
 
 .dropdownMenu {
     position: absolute;
-    top: 100%; /* อยู่ใต้ปุ่ม Toggle */
+    top: 100%; 
     left: 0;
     z-index: 50;
     width: 100%;
-    max-height: 250px; /* จำกัดความสูงสำหรับ Scroll */
+    max-height: 250px; 
     overflow-y: auto;
     background-color: white;
     border: 1px solid #c8d4e0;
@@ -158,18 +158,16 @@
 }
 
 .dropdownActiveItem {
-    background-color: #e6f0ff; /* สีอ่อนๆ เมื่อถูกเลือก */
+    background-color: #e6f0ff; 
     font-weight: 600;
 }
-
-/* --- Selected Tags Styles --- */
 
 .selectedTags {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
     margin-top: 10px;
-    width: 100%; /* ให้เต็มความกว้าง */
+    width: 100%; 
 }
 
 .brandTag {
@@ -184,6 +182,30 @@
 
 .brandTag:hover {
     background-color: #0056b3;
+}
+
+
+/* --- NEW: Sorting Select Styles --- */
+.sortSelect {
+    /* ทำให้ดูเหมือนเป็นส่วนหนึ่งของ buttonGroup */
+    padding: 8px 12px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 0.85em;
+    font-weight: 500;
+    color: #333;
+    flex: 2 1 auto; /* ให้พื้นที่มากกว่าปุ่ม Direction */
+    outline: none;
+    -webkit-appearance: none; /* ลบ default select style */
+    -moz-appearance: none;
+    appearance: none;
+    border-right: 1px solid #c8d4e0; /* เส้นแบ่งจากปุ่ม Direction */
+}
+
+.sortDirectionButton {
+    flex: 1 1 120px; 
+    font-weight: 600 !important;
 }
 
 
@@ -279,7 +301,7 @@
   font-size: 0.95em;
 }
 
-/* --- Compare Button (เหมือนเดิม) --- */
+/* --- Compare Button --- */
 .compareButton {
   padding: 10px 20px;
   font-size: 0.9em;
@@ -329,7 +351,7 @@
   overflow-y: auto;
 }
 
-/* --- Table Styles (เหมือนเดิม) --- */
+/* --- Table Styles --- */
 .comparisonTableContainer {
   overflow-x: auto;
   margin-top: 20px;
@@ -353,15 +375,14 @@
 }
 
 .highlightMaxValue::after {
-  content: '★';
-  color: gold;
+  content: '⭐';
+  color: #ffd700;
   position: absolute;
-  top: -5px;
-  right: 5px;
+  top: 1px;
+  right: 3px;
   font-size: 0.7em;
   line-height: 1;
 }
-
 
 /* --- 5. Media Queries for Tablet/Desktop (>= 768px) --- */
 
@@ -391,20 +412,27 @@
     
     /* Brand Dropdown ใน Desktop */
     .brandDropdownContainer {
-        width: 180px; /* กำหนดความกว้างที่เหมาะสม */
+        width: 180px; 
     }
     
-    /* Button Group ใน Desktop (ให้จัดเรียงสวยงาม) */
+    /* Button Group ใน Desktop */
     .buttonGroup {
         flex-wrap: nowrap;
+        width: auto;
     }
+    
+    /* Sorting Group ใน Desktop */
+    .filterGroup:last-child .buttonGroup {
+        width: 250px; /* กำหนดความกว้างคงที่สำหรับ Sorting */
+    }
+
 
   .filterButton {
     font-size: 0.9em;
         flex: 1 1 auto;
   }
 
-  /* 🛑 ปรับ Floating Button สำหรับ Desktop */
+  /* ปรับ Floating Button สำหรับ Desktop */
   .floatingCompareWrapper {
     position: fixed;
     bottom: 30px;

@@ -1,4 +1,4 @@
-// pages/index.js (FINALIZED CODE WITH MULTI-SELECT DROPDOWN FOR BRAND)
+// pages/index.js (FINALIZED CODE WITH MULTI-SELECT DROPDOWN & SORTING)
 import Head from 'next/head';
 import { useState, useMemo } from 'react';
 import { catFoodData } from '../data/catFoodData';
@@ -144,7 +144,14 @@ const ComparisonModal = ({ comparingItems, onClose, onClear }) => {
                 return val === maxValues[key];
             }).length;
 
-            return count === 1; // เน้นเมื่อมีค่าสูงสุด "เดียว" เท่านั้น
+            // เน้นเมื่อมีค่าสูงสุด "เดียว" สำหรับ protein, fat, taurine
+            // และค่าต่ำสุด "เดียว" สำหรับ moisture (ความชื้น)
+            if (key === 'moisture') {
+                const minMoisture = Math.min(...comparingItems.map(i => parseFloat(getDMBValue(i, 'moisture').replace('%', ''))));
+                return currentValue === minMoisture; // เน้นความชื้นที่ต่ำที่สุด
+            }
+            
+            return count === 1; // เน้นค่าสูงสุดเดียว สำหรับ Protein, Fat, Fiber, Taurine
         }
         return false;
     };
@@ -235,10 +242,14 @@ const Home = () => {
   const [filterAge, setFilterAge] = useState([]);
   const [filterBrand, setFilterBrand] = useState([]);
  
-  // 🛑 NEW: State สำหรับควบคุมการเปิด/ปิด Dropdown
+  // 🛑 Brand Dropdown State
   const [isBrandDropdownOpen, setIsBrandDropdownOpen] = useState(false);
 
-  // 2. State สำหรับ Comparison (เหมือนเดิม)
+    // 🛑 Sorting State
+    const [sortBy, setSortBy] = useState('none'); 
+    const [sortDirection, setSortDirection] = useState('desc'); // 'asc' หรือ 'desc'
+
+  // 2. State สำหรับ Comparison
   const [comparisonList, setComparisonList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -247,20 +258,18 @@ const Home = () => {
   const ageOptions = ['Kitten', 'Adult', 'Senior', 'All Life Stages', 'Mother & Baby'];
   const brandOptions = [...new Set(catFoodData.map(f => f.brand))].sort();
 
-    // 🟢 ฟังก์ชัน: จัดการการเลือก/ยกเลิกการเลือกใน Array
+    // ฟังก์ชัน: จัดการการเลือก/ยกเลิกการเลือกใน Array
     const toggleFilter = (currentFilters, setFilterFunction, value) => {
         setFilterFunction(prevFilters => {
             if (prevFilters.includes(value)) {
-                // ยกเลิกการเลือก
                 return prevFilters.filter(item => item !== value);
             } else {
-                // เลือกเพิ่ม
                 return [...prevFilters, value];
             }
         });
     };
 
-  // 3. ฟังก์ชันจัดการการเลือกเปรียบเทียบ (เหมือนเดิม)
+  // 3. ฟังก์ชันจัดการการเลือกเปรียบเทียบ
   const toggleComparison = (id) => {
     setComparisonList(prevList => {
       if (prevList.includes(id)) {
@@ -276,16 +285,52 @@ const Home = () => {
 
   const isComparing = (id) => comparisonList.includes(id);
 
-  // 4. useMemo เพื่อกรองข้อมูล (รองรับ Multi-Select)
-  const filteredFood = useMemo(() => {
-    return catFoodData.filter(food => {
-      const typeMatch = filterType.length === 0 || filterType.some(ft => food.type.includes(ft));
-      const ageMatch = filterAge.length === 0 || filterAge.some(fa => food.age.includes(fa));
-      const brandMatch = filterBrand.length === 0 || filterBrand.some(fb => food.brand === fb);
-     
-      return typeMatch && ageMatch && brandMatch;
-    });
-  }, [filterType, filterAge, filterBrand]);
+    // 4. useMemo เพื่อกรองและจัดเรียงข้อมูล
+    const sortedAndFilteredFood = useMemo(() => {
+        // ขั้นตอนที่ 1: การกรอง (Filtering)
+        let currentData = catFoodData.filter(food => {
+            const typeMatch = filterType.length === 0 || filterType.some(ft => food.type.includes(ft));
+            const ageMatch = filterAge.length === 0 || filterAge.some(fa => food.age.includes(fa));
+            const brandMatch = filterBrand.length === 0 || filterBrand.some(fb => food.brand === fb);
+            
+            return typeMatch && ageMatch && brandMatch;
+        });
+
+        // ขั้นตอนที่ 2: การจัดเรียง (Sorting) 
+        if (sortBy !== 'none') {
+            currentData = [...currentData].sort((a, b) => {
+                let valA, valB;
+                
+                if (sortBy === 'name') {
+                    // จัดเรียงตามชื่อ (A-Z)
+                    valA = a.name.toLowerCase();
+                    valB = b.name.toLowerCase();
+                    const comparison = valA.localeCompare(valB);
+                    return sortDirection === 'asc' ? comparison : -comparison; 
+                } 
+                
+                // จัดเรียงตามสารอาหาร (DMB / As Fed)
+                const moistureA = parseFloat(a.nutrition.moisture);
+                const moistureB = parseFloat(b.nutrition.moisture);
+
+                if (sortBy === 'proteinDMB') {
+                    valA = parseFloat(calculateDMB(a.nutrition.protein, moistureA));
+                    valB = parseFloat(calculateDMB(b.nutrition.protein, moistureB));
+                } else if (sortBy === 'moisture') {
+                    valA = moistureA;
+                    valB = moistureB;
+                } else {
+                    return 0;
+                }
+                
+                const comparison = valA - valB;
+                // 'desc' คือ มากไปน้อย (valA - valB) -> -comparison
+                return sortDirection === 'asc' ? comparison : -comparison; 
+            });
+        }
+
+        return currentData;
+    }, [filterType, filterAge, filterBrand, sortBy, sortDirection]);
 
   // 5. ดึงข้อมูลสินค้าที่ถูกเลือกสำหรับ Comparison Modal
   const comparingItems = useMemo(() => {
@@ -313,7 +358,7 @@ const Home = () => {
       {/* --- Filter Controls --- */}
       <div className={styles.filterControls}>
 
-        {/* 🛑 Filter แบรนด์ (Multi-select Dropdown) */}
+        {/* Filter แบรนด์ (Multi-select Dropdown) */}
         <div className={styles.filterGroup}>
           <label>แบรนด์:</label>
          
@@ -361,7 +406,7 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Filter ประเภทอาหาร (Button Group เหมือนเดิม) */}
+        {/* Filter ประเภทอาหาร (Button Group) */}
         <div className={styles.filterGroup}>
           <label>ประเภท:</label>
           <div className={styles.buttonGroup}>
@@ -377,7 +422,7 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Filter อายุแมว (Button Group เหมือนเดิม) */}
+        {/* Filter อายุแมว (Button Group) */}
         <div className={styles.filterGroup}>
           <label>อายุแมว:</label>
           <div className={styles.buttonGroup}>
@@ -392,10 +437,50 @@ const Home = () => {
             ))}
           </div>
         </div>
+                
+                {/* 🛑 Filter การจัดเรียง (Sorting Dropdown) */}
+                <div className={styles.filterGroup}>
+                    <label>จัดเรียงตาม:</label>
+                    <div className={styles.buttonGroup}>
+                        <select
+                            value={sortBy}
+                            onChange={(e) => {
+                                setSortBy(e.target.value);
+                                // ตั้งค่าทิศทางเริ่มต้นตามความเหมาะสม
+                                if (e.target.value === 'name') {
+                                    setSortDirection('asc');
+                                } else if (e.target.value !== 'none') {
+                                    setSortDirection('desc');
+                                } else {
+                                    setSortDirection('desc'); // รีเซ็ตเป็นค่าเริ่มต้น
+                                }
+                            }}
+                            className={styles.sortSelect}
+                        >
+                            <option value="none">-- ไม่จัดเรียง --</option>
+                            <option value="proteinDMB">โปรตีน (DMB) สูงสุด</option>
+                            <option value="moisture">ความชื้น (As Fed) สูงสุด</option>
+                            <option value="name">ชื่อ</option>
+                        </select>
+                        
+                        {/* ปุ่มสลับทิศทาง (แสดงเมื่อไม่ได้เลือก 'none') */}
+                        {sortBy !== 'none' && (
+                            <button
+                                onClick={() => setSortDirection(prev => prev === 'desc' ? 'asc' : 'desc')}
+                                className={`${styles.filterButton} ${styles.sortDirectionButton} ${sortDirection === 'desc' ? styles.active : ''}`}
+                            >
+                                {sortBy === 'name' 
+                                    ? (sortDirection === 'asc' ? 'A-Z' : 'Z-A')
+                                    : (sortDirection === 'desc' ? '⬇️ สูงไปต่ำ' : '⬆️ ต่ำไปสูง')}
+                            </button>
+                        )}
+                    </div>
+                </div>
+                
       </div>
       {/* --- สิ้นสุด Filter Controls --- */}
 
-      {/* Floating Button Wrapper (เหมือนเดิม) */}
+      {/* Floating Button Wrapper */}
       {comparingItems.length > 0 && (
         <div className={styles.floatingCompareWrapper}>
           <button
@@ -408,10 +493,10 @@ const Home = () => {
       )}
 
 
-      {/* ส่วน Grid แสดง Card อาหารที่ถูกกรอง (เหมือนเดิม) */}
+      {/* ส่วน Grid แสดง Card อาหารที่ถูกกรองและจัดเรียงแล้ว */}
       <div className={styles.foodGrid}>
-        {filteredFood.length > 0 ? (
-          filteredFood.map((food) => (
+        {sortedAndFilteredFood.length > 0 ? (
+          sortedAndFilteredFood.map((food) => (
             <FoodCard
               key={food.id}
               food={food}
@@ -426,7 +511,7 @@ const Home = () => {
         )}
       </div>
 
-      {/* แสดง Comparison Modal (เหมือนเดิม) */}
+      {/* แสดง Comparison Modal */}
       {isModalOpen && comparingItems.length > 0 && (
         <ComparisonModal
           comparingItems={comparingItems}
