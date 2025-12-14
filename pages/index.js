@@ -1,4 +1,4 @@
-// pages/index.js (FINALIZED CODE WITH FLOATING BUTTON & MAX VALUE HIGHLIGHT)
+// pages/index.js (FINALIZED CODE WITH MULTI-SELECT FILTERS & MAX VALUE HIGHLIGHT)
 import Head from 'next/head';
 import { useState, useMemo } from 'react';
 // 🟢 การเรียกใช้ Data จากไฟล์ภายนอก
@@ -130,7 +130,7 @@ const ComparisonModal = ({ comparingItems, onClose, onClear }) => {
             }).filter(val => !isNaN(val)); // กรองค่าที่คำนวณไม่ได้
             
             if (values.length > 0) {
-                // สำหรับ key ส่วนใหญ่ เราสนใจค่าสูงสุด
+                // เราเน้นค่าสูงสุดสำหรับทุกคีย์
                 maxMap[key] = Math.max(...values);
             }
         });
@@ -187,11 +187,11 @@ const ComparisonModal = ({ comparingItems, onClose, onClear }) => {
                     {key === 'moisture' && <span className={styles.dmbLabel}>(As Fed)</span>}
                   </td>
                   {comparingItems.map(item => {
-                                        const isHighlighted = isMaxValue(item, key); // 🟢 ใช้ฟังก์ชัน Highlight
+                                        const isHighlighted = isMaxValue(item, key); 
                                         return (
                         <td 
                                                 key={item.id} 
-                                                // 🟢 เพิ่มคลาส Highlight 
+                                                // 🟢 ใช้คลาส Highlight
                                                 className={`${styles.tableValue} ${isHighlighted ? styles.highlightMaxValue : ''}`}
                                             >
                       {getDMBValue(item, key)}
@@ -236,21 +236,32 @@ const ComparisonModal = ({ comparingItems, onClose, onClear }) => {
 
 // Component หลัก
 const Home = () => {
-  // 1. State สำหรับ Filter
-  const [filterType, setFilterType] = useState('All');
-  const [filterAge, setFilterAge] = useState('All');
-  const [filterBrand, setFilterBrand] = useState('All');
+  // 1. 🛑 State สำหรับ Filter เปลี่ยนเป็น Array สำหรับ Multi-Select
+  const [filterType, setFilterType] = useState([]);
+  const [filterAge, setFilterAge] = useState([]);
+  const [filterBrand, setFilterBrand] = useState([]);
  
-  // 2. State สำหรับ Comparison
+  // 2. State สำหรับ Comparison (เหมือนเดิม)
   const [comparisonList, setComparisonList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // ตัวเลือกสำหรับ Filter
-  const typeOptions = ['All', 'Dry', 'Wet', 'Freeze-Dried', 'Prescription'];
-  const ageOptions = ['All', 'Kitten', 'Adult', 'Senior', 'All Life Stages', 'Mother & Baby'];
-  const brandOptions = ['All', ...new Set(catFoodData.map(f => f.brand))].sort();
+  // ตัวเลือกสำหรับ Filter (ลบ 'All' ออก เพราะตอนนี้การไม่เลือกอะไรเลย = All)
+  const typeOptions = ['Dry', 'Wet', 'Freeze-Dried', 'Prescription'];
+  const ageOptions = ['Kitten', 'Adult', 'Senior', 'All Life Stages', 'Mother & Baby'];
+  const brandOptions = [...new Set(catFoodData.map(f => f.brand))].sort();
 
-  // 3. ฟังก์ชันจัดการการเลือกเปรียบเทียบ
+    // 🟢 ฟังก์ชันใหม่: จัดการการเลือก/ยกเลิกการเลือกใน Array
+    const toggleFilter = (currentFilters, setFilterFunction, value) => {
+        if (currentFilters.includes(value)) {
+            // ยกเลิกการเลือก
+            setFilterFunction(currentFilters.filter(item => item !== value));
+        } else {
+            // เลือกเพิ่ม
+            setFilterFunction([...currentFilters, value]);
+        }
+    };
+
+  // 3. ฟังก์ชันจัดการการเลือกเปรียบเทียบ (เหมือนเดิม)
   const toggleComparison = (id) => {
     setComparisonList(prevList => {
       if (prevList.includes(id)) {
@@ -266,23 +277,25 @@ const Home = () => {
 
   const isComparing = (id) => comparisonList.includes(id);
 
-  // 4. useMemo เพื่อกรองข้อมูล
+  // 4. 🛑 useMemo แก้ไขให้รองรับ Multi-Select
   const filteredFood = useMemo(() => {
     return catFoodData.filter(food => {
-      const typeMatch = filterType === 'All' || food.type.includes(filterType);
-      const ageMatch = filterAge === 'All' || food.age.includes(filterAge);
-      const brandMatch = filterBrand === 'All' || food.brand === filterBrand;
+      // ถ้า Array ว่าง (filter.length === 0) ถือว่า Match ทั้งหมด
+            // ถ้า Array ไม่ว่าง (filter.length > 0) ต้องมีอย่างน้อย 1 ตัวเลือกที่ถูกเลือก ตรงกับข้อมูลอาหาร (use .some)
+      const typeMatch = filterType.length === 0 || filterType.some(ft => food.type.includes(ft));
+      const ageMatch = filterAge.length === 0 || filterAge.some(fa => food.age.includes(fa));
+      const brandMatch = filterBrand.length === 0 || filterBrand.some(fb => food.brand === fb);
      
       return typeMatch && ageMatch && brandMatch;
     });
   }, [filterType, filterAge, filterBrand]);
 
-  // 5. ดึงข้อมูลสินค้าที่ถูกเลือกสำหรับ Comparison Modal
+  // 5. ดึงข้อมูลสินค้าที่ถูกเลือกสำหรับ Comparison Modal (เหมือนเดิม)
   const comparingItems = useMemo(() => {
     return catFoodData.filter(food => comparisonList.includes(food.id));
   }, [comparisonList]);
  
-  // ฟังก์ชันสำหรับล้างรายการทั้งหมด และปิด Modal
+  // ฟังก์ชันสำหรับล้างรายการทั้งหมด และปิด Modal (เหมือนเดิม)
   const handleClearComparison = () => {
     setComparisonList([]);
     setIsModalOpen(false);
@@ -296,7 +309,6 @@ const Home = () => {
         <title>Cat Food Comparator</title>
       </Head>
      
-      {/* 🟢 ใช้ Class CSS ใหม่สำหรับ Title */}
       <h1 className={styles.pageTitle}>
         😻 เปรียบเทียบอาหารแมว
       </h1>
@@ -304,29 +316,15 @@ const Home = () => {
       {/* --- Filter Controls --- */}
       <div className={styles.filterControls}>
 
-        {/* Filter แบรนด์ (Select) */}
+        {/* 🛑 Filter แบรนด์ (Button Group, ใช้ toggleFilter) */}
         <div className={styles.filterGroup}>
           <label>แบรนด์:</label>
-          <select
-            value={filterBrand}
-            onChange={(e) => setFilterBrand(e.target.value)}
-            className={styles.filterSelectBrand}
-          >
-            {brandOptions.map(option => (
-              <option key={option} value={option}>{option}</option>
-            ))}
-          </select>
-        </div>
-
-        {/* Filter ประเภทอาหาร (Button Group) */}
-        <div className={styles.filterGroup}>
-          <label>ประเภท:</label>
           <div className={styles.buttonGroup}>
-            {typeOptions.map(option => (
+            {brandOptions.map(option => (
               <button
                 key={option}
-                className={`${styles.filterButton} ${filterType.includes(option) ? styles.active : ''}`}
-                onClick={() => setFilterType(option)}
+                className={`${styles.filterButton} ${filterBrand.includes(option) ? styles.active : ''}`}
+                onClick={() => toggleFilter(filterBrand, setFilterBrand, option)}
               >
                 {option}
               </button>
@@ -334,7 +332,23 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Filter อายุแมว (Button Group) */}
+        {/* 🛑 Filter ประเภทอาหาร (Button Group, ใช้ toggleFilter) */}
+        <div className={styles.filterGroup}>
+          <label>ประเภท:</label>
+          <div className={styles.buttonGroup}>
+            {typeOptions.map(option => (
+              <button
+                key={option}
+                className={`${styles.filterButton} ${filterType.includes(option) ? styles.active : ''}`}
+                onClick={() => toggleFilter(filterType, setFilterType, option)}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* 🛑 Filter อายุแมว (Button Group, ใช้ toggleFilter) */}
         <div className={styles.filterGroup}>
           <label>อายุแมว:</label>
           <div className={styles.buttonGroup}>
@@ -342,7 +356,7 @@ const Home = () => {
               <button
                 key={option}
                 className={`${styles.filterButton} ${filterAge.includes(option) ? styles.active : ''}`}
-                onClick={() => setFilterAge(option)}
+                onClick={() => toggleFilter(filterAge, setFilterAge, option)}
               >
                 {option}
               </button>
@@ -352,7 +366,7 @@ const Home = () => {
       </div>
       {/* --- สิ้นสุด Filter Controls --- */}
 
-      {/* 🟢 Floating Button Wrapper (ปุ่มลอยที่ด้านล่างขวา) */}
+      {/* Floating Button Wrapper (เหมือนเดิม) */}
       {comparingItems.length > 0 && (
         <div className={styles.floatingCompareWrapper}>
           <button
@@ -363,10 +377,9 @@ const Home = () => {
           </button>
         </div>
       )}
-      {/* 🟢 สิ้นสุด Floating Button Wrapper */}
 
 
-      {/* ส่วน Grid แสดง Card อาหารที่ถูกกรอง */}
+      {/* ส่วน Grid แสดง Card อาหารที่ถูกกรอง (เหมือนเดิม) */}
       <div className={styles.foodGrid}>
         {filteredFood.length > 0 ? (
           filteredFood.map((food) => (
@@ -384,7 +397,7 @@ const Home = () => {
         )}
       </div>
 
-      {/* แสดง Comparison Modal */}
+      {/* แสดง Comparison Modal (เหมือนเดิม) */}
       {isModalOpen && comparingItems.length > 0 && (
         <ComparisonModal
           comparingItems={comparingItems}
