@@ -1,4 +1,4 @@
-// pages/index.js (FINALIZED CODE WITH MULTI-SELECT DROPDOWN & SORTING)
+// pages/index.js (FINALIZED CODE WITH DMB & AS FED IN ONE LINE)
 import Head from 'next/head';
 import { useState, useMemo } from 'react';
 import { catFoodData } from '../data/catFoodData';
@@ -61,7 +61,7 @@ const FoodCard = ({ food, isComparing, toggleComparison }) => {
       <hr style={{ margin: '15px 0', borderTop: '1px solid #eee' }} />
 
       <h3 style={{ fontSize: '1.1em', marginBottom: '10px', color: '#333' }}>
-        อัตราส่วนโภชนาการ (DMB)
+        อัตราส่วนโภชนาการ
       </h3>
       <ul className={styles.nutritionList}>
         {Object.entries(food.nutrition).map(([key, value]) => {
@@ -70,20 +70,32 @@ const FoodCard = ({ food, isComparing, toggleComparison }) => {
           let colorStyle = {};
 
           if (key === 'moisture') {
+            // สำหรับความชื้น: แสดงเฉพาะค่า As Fed
             colorStyle = { color: '#d32f2f' };
+            displayValue = `${value}% (As Fed)`;
           } else if (['protein', 'fat', 'fiber'].includes(key)) {
+            // สำหรับ Protein, Fat, Fiber: แสดงทั้ง DMB และ As Fed
             const dmbValue = calculateDMB(value, moisture);
-            displayValue = `${dmbValue}% (DMB)`;
             colorStyle = { color: styles['--primary-color'] || '#007bff' };
+            
+                        // การแสดงผล: DMB ตัวหนา + As Fed ในวงเล็บ
+            displayValue = (
+                            <>
+                                <strong style={{color: '#333'}}>{dmbValue}% (DMB)</strong>
+                                <span style={{fontSize: '0.85em', color: '#888', marginLeft: '8px'}}>| {value}% (As Fed)</span>
+                            </>
+                        );
           } else if (key === 'taurine') {
+                        // สำหรับ Taurine: แสดงเฉพาะค่า As Fed
             colorStyle = { color: styles['--primary-color'] || '#007bff' };
           }
 
           return (
             <li key={key} className={styles.nutritionItem}>
               <span>{formatKey(key)}</span>
+                            {/* ใช้เงื่อนไขเพื่อแสดง String หรือ React Fragment */}
               <span style={colorStyle}>
-                {displayValue}
+                                {typeof displayValue === 'string' ? displayValue : displayValue}
               </span>
             </li>
           );
