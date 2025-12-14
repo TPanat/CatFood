@@ -1,9 +1,9 @@
 :root {
     --primary-color: #007bff; /* สีหลัก (น้ำเงิน) */
     --secondary-color: #0056b3; /* สีเข้มขึ้น */
-    --success-color: #28a745; /* สีเน้น (เขียว) */
+    --success-color: #4CAF50; /* สีเขียวใหม่สำหรับปุ่มถูกเลือก */
     --danger-color: #d32f2f; /* สีความชื้น/อันตราย (แดง) */
-    --comparison-orange: #FF9800; /* 🛑 สีส้มสำหรับปุ่ม Floating */
+    --comparison-orange: #FF9800; /* สีส้มสำหรับปุ่ม Floating */
     --border-radius: 6px; /* ขอบมนมาตรฐานสำหรับ Card/Button เดิม */
     --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1); /* เงาเดิม */
 }
@@ -24,8 +24,7 @@
     font-weight: 800;
 }
 
-/* --- 1. Filter Controls (คงดีไซน์เดิม) --- */
-
+/* --- 1. Filter Controls --- */
 .filterControls {
     display: flex;
     flex-wrap: wrap;
@@ -166,7 +165,7 @@
 }
 
 
-/* --- 2. Food Grid & Card (คงดีไซน์เดิม) --- */
+/* --- 2. Food Grid & Card --- */
 
 .foodGrid {
     display: grid;
@@ -259,23 +258,21 @@
     background-color: var(--secondary-color);
 }
 
-/* 🛑 ปุ่มเมื่อถูกเลือก: สีเขียว (ตามที่ต้องการ) */
+/* 🛑 ปุ่มเมื่อถูกเลือก: สีเขียวสวยงาม (แก้ไขเพิ่ม !important) */
 .compareButton.selectedForComparison {
-    /* 🛑 ปรับสีพื้นหลังให้เป็นสีเขียวที่ดูสว่างและสดใสขึ้นเล็กน้อย */
-    background-color: #4CAF50; /* เขียวสวยงาม */ 
-    /* 🛑 เพิ่มเงาเพื่อให้ดูนูนและโดดเด่น */
+    background-color: #4CAF50 !important; /* เขียวสวยงาม + !important */
+    color: white !important; /* ให้แน่ใจว่าตัวอักษรเป็นสีขาว */
     box-shadow: 0 4px 10px rgba(76, 175, 80, 0.4); 
-    font-weight: 700; /* เน้นตัวหนา */
+    font-weight: 700;
 }
 
 .compareButton.selectedForComparison:hover {
-    /* 🛑 Hover เมื่อถูกเลือกแล้ว อาจจะเข้มขึ้นเล็กน้อย */
-    background-color: #43a047; 
+    background-color: #43a047 !important; /* เข้มขึ้นเล็กน้อยเมื่อ hover + !important */
 }
 
-/* 🛑 Floating Comparison Button: แก้ไขให้เป็น Fixed */
+/* Floating Comparison Button: สีส้ม */
 .floatingCompareWrapper {
-    position: fixed; /* 🛑 แก้ไขให้ลอยอยู่กับหน้าจอ */
+    position: fixed; 
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
@@ -285,12 +282,12 @@
 }
 
 .showCompareSummaryButton {
-    background-color: var(--comparison-orange); /* 🛑 เปลี่ยนเป็นสีส้ม #FF9800 */
+    background-color: var(--comparison-orange); 
     color: white;
     padding: 12px 25px;
     border: none;
     border-radius: 30px; 
-    box-shadow: 0 4px 15px rgba(211, 47, 47, 0.4);
+    box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4); 
     cursor: pointer;
     font-size: 1.1em;
     font-weight: 700;
@@ -298,7 +295,7 @@
 }
 
 .showCompareSummaryButton:hover {
-    background-color: #c62828;
+    background-color: #F57C00; 
 }
 
 
