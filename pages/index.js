@@ -66,13 +66,13 @@ const FoodCard = ({ food, isComparing, toggleComparison }) => {
       <ul className={styles.nutritionList}>
         {Object.entries(food.nutrition).map(([key, value]) => {
           const moisture = food.nutrition.moisture;
-          let displayValue = `${value}% (As Fed)`;
+          let displayValue = `${value} (As Fed)`;
           let colorStyle = {};
 
           if (key === 'moisture') {
             // สำหรับความชื้น: แสดงเฉพาะค่า As Fed
             colorStyle = { color: '#d32f2f' };
-            displayValue = `${value}% (As Fed)`;
+            displayValue = `${value} (As Fed)`;
           } else if (['protein', 'fat', 'fiber'].includes(key)) {
             // สำหรับ Protein, Fat, Fiber: แสดงทั้ง DMB และ As Fed
             const dmbValue = calculateDMB(value, moisture);
