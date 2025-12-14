@@ -468,3 +468,49 @@
         padding: 20px;
     }
 }
+
+/* --- Info Section Styles --- */
+
+.infoSection {
+    background-color: var(--color-background-light); /* #f7f7f7 */
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    border-left: 5px solid var(--primary-color); /* #007bff */
+}
+
+.infoSection h2 {
+    color: var(--primary-color);
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+    border-bottom: 1px dashed #ddd;
+    padding-bottom: 5px;
+}
+
+.infoSection h3 {
+    color: #4CAF50; /* Green highlight for DMB */
+    font-size: 1.1em;
+    margin-top: 20px;
+    margin-bottom: 8px;
+}
+
+.infoSection p, .infoSection ul {
+    line-height: 1.6;
+    color: #444;
+    margin-bottom: 10px;
+}
+
+.infoSection ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.infoSection ul li {
+    background-color: #fff;
+    padding: 8px 15px;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    border-left: 3px solid #FF9800; /* Orange highlight for key points */
+}
