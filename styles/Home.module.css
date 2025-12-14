@@ -1,155 +1,139 @@
-/* styles/Home.module.css (MODERN & ROUNDED - Mobile First - Final) */
-
-/* --- Variables (เพื่อควบคุมสีหลักและรัศมีขอบ) --- */
 :root {
-  --primary-color: #007bff; /* สีน้ำเงินหลัก */
-  --accent-color: #ff9800; /* สีส้มเน้น */
-  --success-color: #28a745; /* สีเขียวสำหรับ Active Compare */
-  --background-light: #f4f7f9; /* สีพื้นหลังอ่อน */
-  --border-radius-card: 15px; /* รัศมีขอบ Card */
-  --border-radius-button: 25px; /* รัศมีขอบปุ่ม/Filter */
-  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08); /* เงาอ่อน */
-  --shadow-lift: 0 8px 16px rgba(0, 0, 0, 0.15); /* เงายกสูง */
+    --primary-color: #007bff; /* สีหลัก (น้ำเงิน) */
+    --secondary-color: #0056b3; /* สีเข้มขึ้น */
+    --success-color: #28a745; /* สีเน้น (เขียว) */
+    --danger-color: #d32f2f; /* สีความชื้น/อันตราย (แดง) */
+    --border-radius: 8px; /* ขอบมนมาตรฐาน */
+    --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-/* --- 1. Global & Container (Mobile Default) --- */
 .container {
-  font-family: 'Sukhumvit Set', 'Kanit', sans-serif;
-  padding: 10px;
-  max-width: 1200px;
-  margin: 0 auto;
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+    font-family: 'Sukhumvit Set', sans-serif;
+    background-color: #f7f9fc;
 }
 
 .pageTitle {
-  color: #2c3e50;
-  font-weight: 700;
-  margin-bottom: 25px;
-  font-size: 2em;
-  text-align: center;
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+    font-size: 2.2em;
+    font-weight: 800;
 }
 
+/* --- 1. Filter Controls --- */
 
-/* --- 2. Filter Controls (Mobile Default: Stacked) --- */
 .filterControls {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  justify-content: center;
-  align-items: stretch;
-  margin-bottom: 25px;
-  padding: 15px;
-  border-radius: var(--border-radius-card);
-  background-color: var(--background-light);
-  box-shadow: var(--shadow-soft);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
+    align-items: flex-start;
 }
 
 .filterGroup {
-  display: flex;
-  flex-direction: column; /* Column สำหรับ Mobile */
-  justify-content: flex-start;
-  align-items: flex-start;
-  width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .filterGroup label {
-  font-weight: 600;
-  margin-right: 10px;
-  margin-bottom: 5px; 
-  color: #4a4a4a;
-  flex-shrink: 0;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #555;
+    font-size: 0.9em;
 }
 
-/* --- Button Group Styles (สำหรับ Type/Age/Sorting) --- */
 .buttonGroup {
-    flex-grow: 1;
     display: flex;
-    flex-wrap: wrap; 
-    border: 1px solid #c8d4e0;
-    border-radius: var(--border-radius-button);
-    overflow: hidden;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-    width: 100%; /* สำคัญสำหรับ mobile */
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
+/* ปุ่ม Filter */
 .filterButton {
-  padding: 8px 12px;
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-  font-size: 0.85em;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  color: #666;
-  flex: 1 1 auto; 
-  white-space: nowrap;
+    background-color: #eee;
+    color: #333;
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px; /* ขอบมนปุ่ม */
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.2s, border-color 0.2s;
 }
 
-.filterButton:hover:not(.active) {
-  background-color: #eef2f5;
+.filterButton.active,
+.filterButton:hover {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--secondary-color);
 }
 
-.filterButton.active {
-  background-color: var(--primary-color);
-  color: white;
-  border-color: var(--primary-color);
-  font-weight: 600;
+/* ปุ่มจัดเรียง */
+.sortSelect {
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #fff;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.sortDirectionButton {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.sortDirectionButton.active {
+    background-color: var(--secondary-color);
+    color: white;
 }
 
 
-/* --- Brand Multi-select Dropdown Styles --- */
-
+/* Dropdown แบรนด์ */
 .brandDropdownContainer {
     position: relative;
-    width: 100%;
-    min-width: 200px; 
+    z-index: 10;
+    min-width: 250px;
 }
 
 .dropdownToggle {
-    padding: 8px 15px;
-    border: 1px solid #c8d4e0;
-    border-radius: var(--border-radius-button);
-    background-color: white;
-    cursor: pointer;
-    font-size: 0.85em;
-    font-weight: 500;
     width: 100%;
     text-align: left;
-    transition: all 0.2s ease;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.dropdownToggle:hover {
-    border-color: var(--primary-color);
-}
-
-.dropdownActive {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+    font-size: 0.9em;
 }
 
 .dropdownMenu {
     position: absolute;
-    top: 100%; 
+    top: 100%;
     left: 0;
-    z-index: 50;
-    width: 100%;
-    max-height: 250px; 
-    overflow-y: auto;
     background-color: white;
-    border: 1px solid #c8d4e0;
-    border-radius: var(--border-radius-card);
-    box-shadow: var(--shadow-lift);
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-height: 200px;
+    overflow-y: auto;
+    width: 100%;
     margin-top: 5px;
-    padding: 5px 0;
 }
 
 .dropdownItem {
-    padding: 10px 15px;
+    padding: 8px 15px;
     cursor: pointer;
     font-size: 0.9em;
-    color: #333;
     transition: background-color 0.1s;
 }
 
@@ -158,308 +142,345 @@
 }
 
 .dropdownActiveItem {
-    background-color: #e6f0ff; 
+    background-color: #e6f7ff;
     font-weight: 600;
+    color: var(--primary-color);
 }
 
 .selectedTags {
+    margin-top: 8px;
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 10px;
-    width: 100%; 
+    gap: 6px;
 }
 
 .brandTag {
     background-color: var(--primary-color);
     color: white;
-    padding: 5px 10px;
-    border-radius: 12px;
+    padding: 4px 8px;
+    border-radius: 4px;
     font-size: 0.8em;
     cursor: pointer;
     transition: background-color 0.2s;
 }
 
 .brandTag:hover {
-    background-color: #0056b3;
+    background-color: var(--secondary-color);
 }
 
 
-/* --- NEW: Sorting Select Styles --- */
-.sortSelect {
-    /* ทำให้ดูเหมือนเป็นส่วนหนึ่งของ buttonGroup */
-    padding: 8px 12px;
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-    font-size: 0.85em;
-    font-weight: 500;
-    color: #333;
-    flex: 2 1 auto; /* ให้พื้นที่มากกว่าปุ่ม Direction */
-    outline: none;
-    -webkit-appearance: none; /* ลบ default select style */
-    -moz-appearance: none;
-    appearance: none;
-    border-right: 1px solid #c8d4e0; /* เส้นแบ่งจากปุ่ม Direction */
-}
+/* --- 2. Food Grid & Card --- */
 
-.sortDirectionButton {
-    flex: 1 1 120px; 
-    font-weight: 600 !important;
-}
-
-
-/* --- Summary Button Container --- */
-.floatingCompareWrapper {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 990;
-  width: auto;
-  left: 50%;
-  transform: translateX(-50%);
-  max-width: 90%;
-}
-
-.showCompareSummaryButton {
-  padding: 12px 25px;
-  background-color: var(--accent-color);
-  color: white;
-  border: none;
-  border-radius: var(--border-radius-button);
-  font-size: 0.95em;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(255, 152, 0, 0.4);
-  width: 100%;
-  max-width: 350px;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-.showCompareSummaryButton:hover {
-  background-color: #f57c00;
-  box-shadow: 0 6px 10px rgba(255, 152, 0, 0.6);
-}
-
-/* --- 3. Food Grid & Card --- */
 .foodGrid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-  margin-top: 25px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
 }
 
 .foodCard {
-  padding: 20px;
-  border-radius: var(--border-radius-card);
-  box-shadow: var(--shadow-soft);
-  transition: all 0.3s ease;
-  border: 1px solid #f0f0f0;
-  background-color: #ffffff;
+    background-color: white;
+    padding: 20px;
+    /* 🛑 เพิ่มขอบมนและเงาให้สวยงาม */
+    border-radius: var(--border-radius); 
+    box-shadow: var(--shadow-light);
+    border: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .foodCard:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-lift);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
-.selectedForComparison {
-  border: 3px solid var(--primary-color) !important;
-  box-shadow: 0 0 20px rgba(0, 123, 255, 0.4);
-}
-
-.dryType { border-top: 5px solid #ffcc80; }
-.wetType { border-top: 5px solid #80deea; }
-
-.cardHeader {
-  text-align: center;
-  margin-bottom: 15px;
+.foodCard h2 {
+    font-size: 1.3em;
+    margin: 5px 0 10px 0;
+    color: #222;
+    line-height: 1.3;
 }
 
 .foodImageContainer {
-  margin-bottom: 10px;
-  text-align: center;
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .foodImage {
-  max-width: 120px;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
+/* เน้นสีตามประเภทอาหาร */
+.dryType {
+    border-top: 4px solid #ff9800; /* สีส้มสำหรับ Dry */
+}
+
+.wetType {
+    border-top: 4px solid #03a9f4; /* สีฟ้าสำหรับ Wet */
+}
+
+/* สารอาหาร List */
 .nutritionList {
-  list-style: none;
-  padding: 0;
+    list-style: none;
+    padding: 0;
+    margin: 15px 0 20px 0;
+    flex-grow: 1; /* ทำให้ส่วนนี้ขยายได้ */
 }
 
 .nutritionItem {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 0;
-  border-bottom: 1px dashed #e0e0e0;
-  font-size: 0.95em;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px dotted #eee;
+    font-size: 0.95em;
 }
 
-/* --- Compare Button --- */
+.nutritionItem span:first-child {
+    font-weight: 500;
+    color: #444;
+}
+
+/* ปุ่มเลือกเปรียบเทียบ */
 .compareButton {
-  padding: 10px 20px;
-  font-size: 0.9em;
-  margin-top: 15px;
-  border-radius: var(--border-radius-button);
-  border: 1px solid #c8d4e0;
-  background-color: white;
-  color: #333;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-weight: 500;
-  width: 100%;
-  display: block;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    /* 🛑 ขอบมนที่ปุ่ม */
+    border-radius: 6px; 
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: auto; /* จัดให้อยู่ด้านล่างสุด */
+    transition: background-color 0.2s;
 }
 
-.compareActive {
-  background-color: var(--success-color);
-  color: white;
-  border-color: var(--success-color);
-  font-weight: 600;
+.compareButton:hover {
+    background-color: var(--secondary-color);
+}
+
+.compareButton.selectedForComparison {
+    background-color: var(--success-color);
+}
+
+/* Floating Comparison Button */
+.floatingCompareWrapper {
+    position: sticky;
+    bottom: 20px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 10px 0;
+    z-index: 50;
+}
+
+.showCompareSummaryButton {
+    background-color: var(--danger-color); /* ใช้สีแดงเพื่อดึงดูดความสนใจ */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    /* 🛑 ขอบมนและเงาสำหรับปุ่มลอย */
+    border-radius: 30px; 
+    box-shadow: 0 4px 15px rgba(211, 47, 47, 0.4);
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 700;
+    transition: background-color 0.2s;
+}
+
+.showCompareSummaryButton:hover {
+    background-color: #c62828;
 }
 
 
-/* --- 4. Comparison Modal --- */
+/* --- 3. Comparison Modal --- */
+
 .comparisonModalOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(44, 62, 80, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    /* 🛑 Backdrop Blur */
+    backdrop-filter: blur(5px); 
+    -webkit-backdrop-filter: blur(5px);
 }
 
 .comparisonModal {
-  position: relative;
-  background-color: white;
-  width: 95%;
-  max-width: 1000px;
-  max-height: 95vh;
-  padding: 35px 20px 20px;
-  border-radius: var(--border-radius-card);
-  box-shadow: var(--shadow-lift);
-  overflow-y: auto;
+    background-color: white;
+    padding: 30px;
+    /* 🛑 ขอบมนและเงาที่สวยงาม */
+    border-radius: 12px; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); 
+    max-width: 90%;
+    width: 900px;
+    max-height: 90vh;
+    overflow-y: auto; 
+    position: relative;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
 }
 
-/* --- Table Styles --- */
+.comparisonModal h2 {
+    color: var(--primary-color);
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #eee; 
+    padding-bottom: 10px;
+}
+
+/* ปุ่มปิด Modal (X) */
+.closeModalX {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.8em;
+    cursor: pointer;
+    color: #555;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.closeModalX:hover {
+    background-color: #f0f0f0;
+}
+
+/* Table Container */
 .comparisonTableContainer {
-  overflow-x: auto;
-  margin-top: 20px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
+    width: 100%;
+    overflow-x: auto; 
+    margin-bottom: 20px;
+    /* 🛑 ขอบมนและกรอบรอบตาราง */
+    border-radius: 8px; 
+    border: 1px solid #ddd; 
 }
 
 .comparisonTable {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 600px;
-  font-size: 0.9em;
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
 }
 
-.highlightMaxValue {
-  background-color: #e6ffe6;
-  color: var(--success-color);
-  font-weight: 700;
-  font-size: 1.05em;
-  position: relative;
-}
-
-.highlightMaxValue::after {
-  content: '⭐';
-  color: #ffd700;
-  position: absolute;
-  top: 1px;
-  right: 3px;
-  font-size: 0.7em;
-  line-height: 1;
-}
-
-/* --- 5. Media Queries for Tablet/Desktop (>= 768px) --- */
-
-@media (min-width: 768px) {
- 
-  .container {
-    padding: 30px 20px;
-  }
- 
-  .pageTitle {
-    font-size: 2.5em;
-  }
-
-  /* Filter Controls */
-  .filterControls {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 20px;
-    padding: 20px;
-  }
- 
-  .filterGroup {
-    flex-direction: column;
-    align-items: center;
-    width: auto;
-  }
-    
-    /* Brand Dropdown ใน Desktop */
-    .brandDropdownContainer {
-        width: 180px; 
-    }
-    
-    /* Button Group ใน Desktop */
-    .buttonGroup {
-        flex-wrap: nowrap;
-        width: auto;
-    }
-    
-    /* Sorting Group ใน Desktop */
-    .filterGroup:last-child .buttonGroup {
-        width: 250px; /* กำหนดความกว้างคงที่สำหรับ Sorting */
-    }
-
-
-  .filterButton {
+/* หัวตาราง */
+.comparisonTable thead th {
+    background-color: #f8f8f8;
+    padding: 12px 10px;
+    text-align: center;
+    font-weight: 700;
     font-size: 0.9em;
-        flex: 1 1 auto;
-  }
+    color: #333;
+    border: none; 
+}
 
-  /* ปรับ Floating Button สำหรับ Desktop */
-  .floatingCompareWrapper {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    left: auto;
-    transform: none;
-    max-width: none;
-    width: auto;
-  }
+/* ข้อมูลในตาราง */
+.comparisonTable tbody td {
+    padding: 10px 10px;
+    text-align: center;
+    border-top: 1px solid #eee;
+    font-size: 0.95em;
+    line-height: 1.3;
+}
 
-  .showCompareSummaryButton {
-    width: auto;
-    font-size: 1em;
-    max-width: none;
-  }
+/* คอลัมน์แรก (ชื่อสารอาหาร) */
+.comparisonTable tbody td:first-child {
+    font-weight: 600;
+    text-align: left;
+    color: #444;
+    background-color: #fafafa;
+}
 
-  /* Food Grid: 2 คอลัมน์สำหรับ Tablet+ */
-  .foodGrid {
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 30px;
-    margin-top: 35px;
-  }
+/* แถวสลับสี */
+.comparisonTable tbody tr:nth-child(even) td {
+    background-color: #fcfcfc;
+}
 
-  .modalControlButtons {
-    flex-direction: row;
-    gap: 20px;
-    margin-top: 30px;
-    padding-top: 25px;
-  }
+/* เน้นค่าสูงสุด */
+.highlightMaxValue {
+    color: var(--success-color);
+    font-weight: 700;
+    /* 🛑 พื้นหลังเน้นค่าสูงสุด */
+    background-color: #e6ffed !important; 
+}
+
+.dmbLabel {
+    display: block;
+    font-size: 0.7em;
+    color: #888;
+    font-weight: normal;
+}
+
+/* ปุ่มควบคุมด้านล่าง Modal */
+.modalControlButtons {
+    display: flex;
+    justify-content: flex-end; 
+    gap: 15px;
+    padding-top: 15px;
+}
+
+.continueCompareButton {
+    background-color: #6c757d;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    /* 🛑 ขอบมนที่ปุ่ม */
+    border-radius: 8px; 
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.continueCompareButton:hover {
+    background-color: #5a6268;
+}
+
+.clearComparisonButton {
+    background-color: var(--primary-color); 
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    /* 🛑 ขอบมนที่ปุ่ม */
+    border-radius: 8px; 
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.clearComparisonButton:hover {
+    background-color: var(--secondary-color);
+}
+
+
+/* --- Responsive Adjustments (ไม่บังคับ แต่ควรมี) --- */
+@media (max-width: 768px) {
+    .pageTitle {
+        font-size: 1.8em;
+    }
+    .filterControls {
+        flex-direction: column;
+        gap: 10px;
+        padding: 15px;
+    }
+    .foodGrid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    .comparisonModal {
+        padding: 20px;
+    }
 }
