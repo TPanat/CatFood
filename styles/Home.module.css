@@ -402,9 +402,10 @@
 .wetType { border-top: 3px solid var(--teal); }
 
 /* Image */
+/* Image — portrait ratio for cat food packaging */
 .foodImageContainer {
   width: 100%;
-  height: 140px;
+  aspect-ratio: 3 / 4;
   overflow: hidden;
   background: var(--surface-2);
   display: flex;
@@ -416,11 +417,12 @@
 .foodImage {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  padding: 12px;
   transition: transform 0.3s ease;
 }
 
-.foodCard:hover .foodImage { transform: scale(1.04); }
+.foodCard:hover .foodImage { transform: scale(1.06); }
 
 /* Card header */
 .cardHeader {
