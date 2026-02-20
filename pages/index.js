@@ -78,11 +78,11 @@ const FoodCard = ({ food, isComparing, toggleComparison }) => {
       const dmbValue = calculateDMB(value, moisture);
       colorStyle = { color: styles['--primary-color'] || '#007bff' };
      
-            // การแสดงผล: DMB ตัวหนา + As Fed ในวงเล็บ
+            // การแสดงผล: As Fed ตัวหนา + DMB ในวงเล็บ
       displayValue = (
               <>
-                <strong style={{color: '#333'}}>{dmbValue}% (DMB)</strong>
-                <span style={{fontSize: '0.85em', color: '#888', marginLeft: '8px'}}>| {value}% (As Fed)</span>
+                <strong style={{color: '#333'}}>{value}% (As Fed)</strong>
+                <span style={{fontSize: '0.85em', color: '#888', marginLeft: '8px'}}>| {dmbValue}% (DMB)</span>
               </>
             );
      } else if (key === 'taurine') {
