@@ -1,553 +1,784 @@
+/* ============================================================
+   CAT FOOD COMPARATOR — Modern Mobile-First Design
+   Palette: Warm off-white · Deep teal · Amber accent · Soft coral
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Sarabun:wght@300;400;500;600;700&display=swap');
+
 :root {
-    --primary-color: #007bff; /* สีหลัก (น้ำเงิน) */
-    --secondary-color: #0056b3; /* สีเข้มขึ้น */
-    --success-color: #4CAF50; /* สีเขียวใหม่สำหรับปุ่มถูกเลือก */
-    --danger-color: #d32f2f; /* สีความชื้น/อันตราย (แดง) */
-    --comparison-orange: #FF9800; /* สีส้มสำหรับปุ่ม Floating */
-    --border-radius: 6px; /* ขอบมนมาตรฐานสำหรับ Card/Button เดิม */
-    --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1); /* เงาเดิม */
-    --color-background-light: #f7f7f7; /* พื้นหลังอ่อนสำหรับ infoSection */
+  /* Brand colours */
+  --teal:           #0d6e6e;
+  --teal-light:     #e6f4f4;
+  --teal-mid:       #1a8a8a;
+  --amber:          #f59e0b;
+  --amber-light:    #fef3c7;
+  --coral:          #ef4444;
+  --coral-light:    #fee2e2;
+  --green:          #10b981;
+  --green-light:    #d1fae5;
+
+  /* Neutrals */
+  --bg:             #faf8f5;
+  --surface:        #ffffff;
+  --surface-2:      #f5f3ef;
+  --border:         #e8e4de;
+  --border-strong:  #d1cbc2;
+  --text-primary:   #1a1714;
+  --text-secondary: #6b6560;
+  --text-muted:     #a09890;
+
+  /* Shadows */
+  --shadow-sm:   0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:   0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-lg:   0 12px 32px rgba(0,0,0,0.10), 0 4px 8px rgba(0,0,0,0.06);
+  --shadow-teal: 0 4px 20px rgba(13,110,110,0.20);
+
+  /* Radius */
+  --r-sm:   8px;
+  --r-md:   14px;
+  --r-lg:   20px;
+  --r-xl:   28px;
+  --r-pill: 999px;
+
+  /* Typography */
+  --font-display: 'Sora', 'Sarabun', sans-serif;
+  --font-body:    'Sarabun', 'Sora', sans-serif;
+
+  /* Legacy aliases so index.js references still resolve */
+  --primary-color:          var(--teal);
+  --secondary-color:        var(--teal-mid);
+  --success-color:          var(--green);
+  --danger-color:           var(--coral);
+  --comparison-orange:      var(--amber);
+  --border-radius:          var(--r-md);
+  --shadow-light:           var(--shadow-sm);
+  --color-background-light: var(--surface-2);
 }
+
+*, *::before, *::after { box-sizing: border-box; }
+
+/* ── Container ────────────────────────────────────────────── */
 
 .container {
-    padding: 20px;
-    max-width: 1400px;
-    margin: 0 auto;
-    font-family: 'Sukhumvit Set', sans-serif;
-    background-color: #f7f9fc;
+  min-height: 100vh;
+  padding: 16px 16px 120px;
+  max-width: 1440px;
+  margin: 0 auto;
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--text-primary);
+  background-color: var(--bg);
+  background-image: radial-gradient(ellipse 80% 40% at 50% -10%, rgba(13,110,110,0.06) 0%, transparent 70%);
 }
+
+/* ── Page Title ───────────────────────────────────────────── */
 
 .pageTitle {
-    text-align: center;
-    color: #333;
-    margin-bottom: 30px;
-    font-size: 2.2em;
-    font-weight: 800;
+  font-family: var(--font-display);
+  text-align: center;
+  font-size: clamp(1.6rem, 5vw, 2.6rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  margin: 8px 0 28px;
+  line-height: 1.15;
 }
 
-/* --- 1. Filter Controls --- */
-.filterControls {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 30px;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-light);
-    align-items: flex-start;
+.pageTitle::after {
+  content: '';
+  display: block;
+  width: 48px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--teal), var(--amber));
+  border-radius: var(--r-pill);
+  margin: 10px auto 0;
 }
 
-.filterGroup {
-    display: flex;
-    flex-direction: column;
-}
-
-.filterGroup label {
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #555;
-    font-size: 0.9em;
-}
-
-.buttonGroup {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.filterButton {
-    background-color: #eee;
-    color: #333;
-    padding: 8px 15px;
-    border: 1px solid #ddd;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    font-size: 0.9em;
-    transition: background-color 0.2s, border-color 0.2s;
-}
-
-.filterButton.active,
-.filterButton:hover {
-    background-color: var(--primary-color);
-    color: white;
-    border-color: var(--secondary-color);
-}
-
-.sortSelect {
-    padding: 8px 15px;
-    border: 1px solid #ddd;
-    border-radius: var(--border-radius);
-    background-color: #fff;
-    cursor: pointer;
-    font-size: 0.9em;
-}
-
-.sortDirectionButton {
-    background-color: #f0f0f0;
-    color: #333;
-}
-
-.sortDirectionButton.active {
-    background-color: var(--secondary-color);
-    color: white;
-}
-
-.brandDropdownContainer {
-    position: relative;
-    z-index: 10;
-    min-width: 250px;
-}
-
-.dropdownToggle {
-    width: 100%;
-    text-align: left;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    padding: 8px 15px;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.9em;
-}
-
-.dropdownMenu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: var(--border-radius);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    max-height: 200px;
-    overflow-y: auto;
-    width: 100%;
-    margin-top: 5px;
-}
-
-.dropdownItem {
-    padding: 8px 15px;
-    cursor: pointer;
-    font-size: 0.9em;
-    transition: background-color 0.1s;
-}
-
-.dropdownItem:hover {
-    background-color: #f0f0f0;
-}
-
-.dropdownActiveItem {
-    background-color: #e6f7ff;
-    font-weight: 600;
-    color: var(--primary-color);
-}
-
-.selectedTags {
-    margin-top: 8px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-}
-
-.brandTag {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.8em;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.brandTag:hover {
-    background-color: var(--secondary-color);
-}
-
-
-/* --- 2. Food Grid & Card --- */
-
-.foodGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-}
-
-.foodCard {
-    background-color: white;
-    padding: 20px;
-    border-radius: var(--border-radius); 
-    box-shadow: var(--shadow-light);
-    border: 1px solid #e0e0e0;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.foodCard:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
-}
-
-.foodCard h2 {
-    font-size: 1.3em;
-    margin: 5px 0 10px 0;
-    color: #222;
-    line-height: 1.3;
-}
-
-.foodImageContainer {
-    width: 100%;
-    height: 150px;
-    overflow: hidden;
-    border-radius: 6px;
-    margin-bottom: 15px;
-    background-color: #f0f0f0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.foodImage {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.dryType {
-    border-top: 4px solid #ff9800; 
-}
-
-.wetType {
-    border-top: 4px solid #03a9f4; 
-}
-
-.nutritionList {
-    list-style: none;
-    padding: 0;
-    margin: 15px 0 20px 0;
-    flex-grow: 1;
-}
-
-.nutritionItem {
-    display: flex;
-    justify-content: space-between;
-    padding: 5px 0;
-    border-bottom: 1px dotted #eee;
-    font-size: 0.95em;
-}
-
-.nutritionItem span:first-child {
-    font-weight: 500;
-    color: #444;
-}
-
-.compareButton {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: var(--border-radius); 
-    cursor: pointer;
-    font-weight: 600;
-    margin-top: auto; 
-    transition: background-color 0.2s;
-}
-
-.compareButton:hover {
-    background-color: var(--secondary-color);
-}
-
-/* 🛑 ปุ่มเมื่อถูกเลือก: สีเขียวสวยงาม (แก้ไขเพิ่ม !important) */
-.compareButton.selectedForComparison {
-    background-color: #4CAF50 !important; /* เขียวสวยงาม + !important */
-    color: white !important; /* ให้แน่ใจว่าตัวอักษรเป็นสีขาว */
-    box-shadow: 0 4px 10px rgba(76, 175, 80, 0.4); 
-    font-weight: 700;
-}
-
-.compareButton.selectedForComparison:hover {
-    background-color: #43a047 !important; /* เข้มขึ้นเล็กน้อยเมื่อ hover + !important */
-}
-
-/* Floating Comparison Button: สีส้ม */
-.floatingCompareWrapper {
-    position: fixed; 
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: auto;
-    padding: 0;
-    z-index: 500; 
-}
-
-.showCompareSummaryButton {
-    background-color: var(--comparison-orange); 
-    color: white;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 30px; 
-    box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4); 
-    cursor: pointer;
-    font-size: 1.1em;
-    font-weight: 700;
-    transition: background-color 0.2s;
-}
-
-.showCompareSummaryButton:hover {
-    background-color: #F57C00; 
-}
-
-
-/* --- 3. Comparison Modal (ดีไซน์ Modern) --- */
-
-.comparisonModalOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4); 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    backdrop-filter: blur(5px); 
-    -webkit-backdrop-filter: blur(5px);
-}
-
-.comparisonModal {
-    background-color: white;
-    padding: 30px;
-    border-radius: 12px; 
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25); 
-    max-width: 90%;
-    width: 900px;
-    max-height: 90vh;
-    overflow-y: auto; 
-    position: relative;
-    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-}
-
-.comparisonModal h2 {
-    color: var(--primary-color);
-    font-size: 1.5em;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #eee; 
-    padding-bottom: 10px;
-}
-
-.closeModalX {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: none;
-    border: none;
-    font-size: 1.8em;
-    cursor: pointer;
-    color: #555;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%; 
-    transition: background-color 0.2s;
-}
-
-.closeModalX:hover {
-    background-color: #f0f0f0;
-}
-
-.comparisonTableContainer {
-    width: 100%;
-    overflow-x: auto; 
-    margin-bottom: 20px;
-    border-radius: 8px; 
-    border: 1px solid #ddd; 
-}
-
-.comparisonTable {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 600px;
-}
-
-.comparisonTable thead th {
-    background-color: #f8f8f8;
-    padding: 12px 10px;
-    text-align: center;
-    font-weight: 700;
-    font-size: 0.9em;
-    color: #333;
-    border: none; 
-}
-
-.comparisonTable tbody td {
-    padding: 10px 10px;
-    text-align: center;
-    border-top: 1px solid #eee;
-    font-size: 0.95em;
-    line-height: 1.3;
-}
-
-.comparisonTable tbody td:first-child {
-    font-weight: 600;
-    text-align: left;
-    color: #444;
-    background-color: #fafafa;
-}
-
-.comparisonTable tbody tr:nth-child(even) td {
-    background-color: #fcfcfc;
-}
-
-.highlightMaxValue {
-    color: var(--success-color);
-    font-weight: 700;
-    background-color: #e6ffed !important; 
-}
-
-.dmbLabel {
-    display: block;
-    font-size: 0.7em;
-    color: #888;
-    font-weight: normal;
-}
-
-.modalControlButtons {
-    display: flex;
-    justify-content: flex-end; 
-    gap: 15px;
-    padding-top: 15px;
-}
-
-.continueCompareButton {
-    background-color: #6c757d;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px; 
-    cursor: pointer;
-    font-weight: 600;
-    transition: background-color 0.2s, transform 0.1s;
-}
-
-.continueCompareButton:hover {
-    background-color: #5a6268;
-}
-
-.clearComparisonButton {
-    background-color: var(--primary-color); 
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px; 
-    cursor: pointer;
-    font-weight: 600;
-    transition: background-color 0.2s, transform 0.1s;
-}
-
-.clearComparisonButton:hover {
-    background-color: var(--secondary-color);
-}
-
-
-/* --- Responsive Adjustments --- */
-@media (max-width: 768px) {
-    .pageTitle {
-        font-size: 1.8em;
-    }
-    .filterControls {
-        flex-direction: column;
-        gap: 10px;
-        padding: 15px;
-    }
-    .foodGrid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-    .comparisonModal {
-        padding: 20px;
-    }
-}
-
-/* --- Info Section Styles --- */
+/* ── Info Section ─────────────────────────────────────────── */
 
 .infoSection {
-    background-color: var(--color-background-light); /* #f7f7f7 */
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 25px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    border-left: 5px solid var(--primary-color); /* #007bff */
+  background: var(--surface);
+  border-radius: var(--r-lg);
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--teal);
+  position: relative;
+  overflow: hidden;
+}
+
+.infoSection::before {
+  content: '📋';
+  position: absolute;
+  right: 16px;
+  top: 14px;
+  font-size: 2.4rem;
+  opacity: 0.06;
+  pointer-events: none;
 }
 
 .infoSection h2 {
-    color: var(--primary-color);
-    margin-top: 0;
-    margin-bottom: 15px;
-    font-size: 1.5em;
-    border-bottom: 1px dashed #ddd;
-    padding-bottom: 5px;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--teal);
+  margin: 0 0 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--border);
 }
 
 .infoSection h3 {
-    color: #4CAF50; /* Green highlight for DMB */
-    font-size: 1.1em;
-    margin-top: 20px;
-    margin-bottom: 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--green);
+  margin: 14px 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.infoSection p, .infoSection ul {
-    line-height: 1.6;
-    color: #444;
-    margin-bottom: 10px;
+.infoSection p {
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
 }
 
 .infoSection ul {
-    list-style: none;
-    padding-left: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .infoSection ul li {
-    background-color: #fff;
-    padding: 8px 15px;
-    margin-bottom: 5px;
-    border-radius: 8px;
-    border-left: 3px solid #FF9800; /* Orange highlight for key points */
+  background: var(--surface-2);
+  padding: 8px 12px 8px 14px;
+  border-radius: var(--r-sm);
+  border-left: 3px solid var(--amber);
+  font-size: 0.86rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
 }
 
-/* --- Selected Card Highlight --- */
+.infoContent {}
+
+/* ── Filter Controls ──────────────────────────────────────── */
+
+.filterControls {
+  background: var(--surface);
+  border-radius: var(--r-lg);
+  padding: 16px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+@media (min-width: 768px) {
+  .filterControls {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    padding: 20px;
+    gap: 16px;
+  }
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filterGroup label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+}
+
+.buttonGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.filterButton {
+  font-family: var(--font-body);
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  padding: 7px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+.filterButton:hover {
+  border-color: var(--teal);
+  color: var(--teal);
+  background: var(--teal-light);
+}
+
+.filterButton.active {
+  background: var(--teal);
+  color: #fff;
+  border-color: var(--teal);
+  box-shadow: 0 2px 8px rgba(13,110,110,0.25);
+}
+
+.sortSelect {
+  font-family: var(--font-body);
+  padding: 7px 28px 7px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-pill);
+  background: var(--surface-2);
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a09890' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  transition: border-color 0.18s;
+}
+
+.sortSelect:focus {
+  outline: none;
+  border-color: var(--teal);
+}
+
+.sortDirectionButton {
+  background: var(--surface-2);
+  color: var(--text-secondary);
+}
+
+.sortDirectionButton.active {
+  background: var(--teal);
+  color: white;
+  border-color: var(--teal);
+}
+
+/* Brand dropdown */
+.brandDropdownContainer {
+  position: relative;
+  z-index: 10;
+  min-width: 200px;
+}
+
+@media (min-width: 768px) {
+  .brandDropdownContainer { min-width: 240px; }
+}
+
+.dropdownToggle {
+  font-family: var(--font-body);
+  width: 100%;
+  text-align: left;
+  background: var(--surface-2);
+  border: 1.5px solid var(--border);
+  padding: 7px 14px;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  transition: border-color 0.18s, color 0.18s;
+}
+
+.dropdownToggle:hover,
+.dropdownActive {
+  border-color: var(--teal);
+  color: var(--teal);
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-lg);
+  max-height: 220px;
+  overflow-y: auto;
+  width: 100%;
+  scrollbar-width: thin;
+}
+
+.dropdownItem {
+  padding: 9px 14px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  transition: background 0.12s;
+  color: var(--text-secondary);
+}
+
+.dropdownItem:hover { background: var(--surface-2); }
+
+.dropdownActiveItem {
+  background: var(--teal-light);
+  font-weight: 600;
+  color: var(--teal);
+}
+
+.selectedTags {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.brandTag {
+  background: var(--teal);
+  color: white;
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.brandTag:hover { background: var(--teal-mid); }
+
+/* ── Food Grid ────────────────────────────────────────────── */
+
+.foodGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 480px) {
+  .foodGrid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 900px) {
+  .foodGrid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+}
+
+@media (min-width: 1200px) {
+  .foodGrid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ── Food Card ────────────────────────────────────────────── */
+
+.foodCard {
+  background: var(--surface);
+  border-radius: var(--r-lg);
+  border: 1.5px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.foodCard:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
 .foodCard.selectedForComparison {
-    border: 2px solid var(--success-color);
-    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
-    transform: translateY(-2px);
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(16,185,129,0.18), var(--shadow-md);
+  transform: translateY(-3px);
 }
 
-/* --- Toast Notification --- */
+.dryType { border-top: 3px solid var(--amber); }
+.wetType { border-top: 3px solid var(--teal); }
+
+/* Image */
+.foodImageContainer {
+  width: 100%;
+  height: 140px;
+  overflow: hidden;
+  background: var(--surface-2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.foodImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.foodCard:hover .foodImage { transform: scale(1.04); }
+
+/* Card header */
+.cardHeader {
+  padding: 14px 16px 0;
+}
+
+.foodCard h2 {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0 0 5px;
+  color: var(--text-primary);
+  line-height: 1.35;
+}
+
+/* Nutrition list */
+.nutritionList {
+  list-style: none;
+  padding: 0 16px;
+  margin: 0 0 14px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.nutritionItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 5px 8px;
+  border-radius: var(--r-sm);
+  font-size: 0.87rem;
+  transition: background 0.12s;
+}
+
+.nutritionItem:hover { background: var(--surface-2); }
+
+.nutritionItem span:first-child {
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  flex-shrink: 0;
+}
+
+.nutritionItem span:last-child {
+  text-align: right;
+}
+
+/* Compare button */
+.compareButton {
+  font-family: var(--font-body);
+  margin: 0 16px 16px;
+  background: var(--teal);
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.88rem;
+  transition: all 0.18s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.compareButton:hover {
+  background: var(--teal-mid);
+  box-shadow: var(--shadow-teal);
+}
+
+.compareButton.selectedForComparison {
+  background: var(--green) !important;
+  box-shadow: 0 4px 12px rgba(16,185,129,0.30) !important;
+  font-weight: 700;
+}
+
+.compareButton.selectedForComparison:hover {
+  background: #059669 !important;
+}
+
+/* ── Floating Compare Button ──────────────────────────────── */
+
+.floatingCompareWrapper {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 500;
+  filter: drop-shadow(0 8px 24px rgba(245,158,11,0.35));
+}
+
+.showCompareSummaryButton {
+  font-family: var(--font-display);
+  background: linear-gradient(135deg, var(--amber) 0%, #e08b00 100%);
+  color: white;
+  padding: 13px 28px;
+  border: none;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  transition: transform 0.18s ease, filter 0.18s ease;
+}
+
+.showCompareSummaryButton:hover {
+  transform: scale(1.04);
+  filter: brightness(1.06);
+}
+
+/* ── Comparison Modal ─────────────────────────────────────── */
+
+.comparisonModalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10,10,10,0.55);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 1000;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+@media (min-width: 640px) {
+  .comparisonModalOverlay {
+    align-items: center;
+    padding: 24px;
+  }
+}
+
+.comparisonModal {
+  background: var(--surface);
+  padding: 24px 20px 32px;
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 960px;
+  max-height: 92vh;
+  overflow-y: auto;
+  position: relative;
+  scrollbar-width: thin;
+  animation: slideUp 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@media (min-width: 640px) {
+  .comparisonModal {
+    border-radius: var(--r-xl);
+    padding: 32px;
+    animation: scaleIn 0.24s cubic-bezier(0.34, 1.2, 0.64, 1);
+  }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+/* Drag handle for mobile sheet */
+.comparisonModal::before {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 4px;
+  background: var(--border-strong);
+  border-radius: var(--r-pill);
+  margin: 0 auto 20px;
+}
+
+@media (min-width: 640px) {
+  .comparisonModal::before { display: none; }
+}
+
+.comparisonModal h2 {
+  font-family: var(--font-display);
+  color: var(--teal);
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin: 0 0 20px;
+  padding-bottom: 14px;
+  border-bottom: 2px solid var(--border);
+}
+
+.closeModalX {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: var(--surface-2);
+  border: 1.5px solid var(--border);
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--text-secondary);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: all 0.15s;
+}
+
+.closeModalX:hover {
+  background: var(--coral-light);
+  border-color: var(--coral);
+  color: var(--coral);
+}
+
+.comparisonTableContainer {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 20px;
+  border-radius: var(--r-md);
+  border: 1.5px solid var(--border);
+  scrollbar-width: thin;
+}
+
+.comparisonTable {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 520px;
+}
+
+.comparisonTable thead th {
+  background: var(--surface-2);
+  padding: 12px 14px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.82rem;
+  font-family: var(--font-display);
+  color: var(--text-primary);
+}
+
+.comparisonTable thead th:first-child { text-align: left; }
+
+.compareHeader { min-width: 120px; }
+
+.tableKey {
+  text-align: left !important;
+  font-weight: 700 !important;
+  color: var(--text-secondary) !important;
+  background: var(--surface-2) !important;
+  white-space: nowrap;
+  min-width: 110px;
+}
+
+.comparisonTable tbody td {
+  padding: 10px 14px;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.comparisonTable tbody tr:hover td {
+  background: var(--teal-light);
+}
+
+.tableValue {}
+
+.highlightMaxValue {
+  color: var(--green) !important;
+  font-weight: 700 !important;
+  background: var(--green-light) !important;
+}
+
+.dmbLabel {
+  display: block;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  margin-top: 1px;
+}
+
+.modalControlButtons {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 10px;
+}
+
+@media (min-width: 480px) {
+  .modalControlButtons {
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+}
+
+.continueCompareButton {
+  font-family: var(--font-body);
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  padding: 10px 20px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-md);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.88rem;
+  transition: all 0.15s;
+}
+
+.continueCompareButton:hover {
+  border-color: var(--teal);
+  color: var(--teal);
+}
+
+.clearComparisonButton {
+  font-family: var(--font-body);
+  background: var(--coral);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.88rem;
+  transition: background 0.15s;
+}
+
+.clearComparisonButton:hover { background: #dc2626; }
+
+/* ── Toast ────────────────────────────────────────────────── */
+
 .toast {
-    position: fixed;
-    bottom: 80px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #323232;
-    color: #fff;
-    padding: 12px 24px;
-    border-radius: 24px;
-    font-size: 0.95em;
-    font-weight: 500;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
-    z-index: 9999;
-    animation: fadeInUp 0.3s ease-out;
-    white-space: nowrap;
+  position: fixed;
+  bottom: 88px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--text-primary);
+  color: #fff;
+  padding: 11px 22px;
+  border-radius: var(--r-pill);
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: var(--shadow-lg);
+  z-index: 9999;
+  white-space: nowrap;
+  animation: fadeInUp 0.25s ease-out;
 }
 
 @keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateX(-50%) translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-    }
+  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ── Small mobile tweaks ──────────────────────────────────── */
+
+@media (max-width: 479px) {
+  .container { padding: 12px 12px 120px; }
+  .comparisonModal { padding: 20px 14px 28px; }
+  .foodCard h2 { font-size: 0.88rem; }
+  .nutritionItem { font-size: 0.83rem; }
 }
