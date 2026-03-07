@@ -20,11 +20,11 @@ const typeColor = (type) => {
   const t = type.toLowerCase();
   if (t.includes('wet'))         return '#e3f2fd';
   if (t.includes('freeze'))      return '#fff8e1';
-  if (t.includes('prescription')) return '#fce4ec';
+  if (t.includes('treat'))       return '#fef3c7';
   return '#e8f4ea'; // dry default
 };
 
-const TYPES  = ['Dry', 'Wet', 'Freeze-Dried', 'Prescription'];
+const TYPES  = ['Dry', 'Wet', 'Freeze-Dried', 'Treat'];
 const BRANDS = [...new Set(catFoodData.map(f => f.brand))].sort();
 
 // ── Certification config ──────────────────────────────────────
@@ -165,8 +165,8 @@ const FoodCard = ({ food, selected, onSelect, onDetail, compareCount }) => {
         {/* Type pill — top left */}
         <div style={{ position: 'absolute', top: 10, left: 10 }}>
           <Badge
-            color={food.type?.includes('Wet') ? '#0c5c8a' : food.type?.includes('Freeze') ? '#6b3fa0' : food.type?.includes('Prescription') ? '#9a1515' : '#1B3A2D'}
-            bg={food.type?.includes('Wet') ? '#e3f2fd' : food.type?.includes('Freeze') ? '#f3e5f5' : food.type?.includes('Prescription') ? '#fce4ec' : '#e8f4ea'}>
+            color={food.type?.includes('Wet') ? '#0c5c8a' : food.type?.includes('Freeze') ? '#6b3fa0' : food.type?.includes('Treat') ? '#b45309' : '#1B3A2D'}
+            bg={food.type?.includes('Wet') ? '#e3f2fd' : food.type?.includes('Freeze') ? '#f3e5f5' : food.type?.includes('Treat') ? '#fef3c7' : '#e8f4ea'}>
             {food.type}
           </Badge>
         </div>
@@ -561,8 +561,8 @@ export default function Home() {
 
   const filtered = useMemo(() => catFoodData.filter(f => {
     const typeOk  = filterType.length  === 0 || filterType.some(t  => {
-      if (t === 'Prescription') return f.type.toLowerCase().includes('prescription');
-      return f.type.startsWith(t) && !f.type.toLowerCase().includes('prescription');
+      if (t === 'Treat') return f.type.toLowerCase().includes('treat');
+      return f.type.startsWith(t) && !f.type.toLowerCase().includes('treat');
     });
     const brandOk = filterBrand.length === 0 || filterBrand.includes(f.brand);
     const searchOk = !search || f.name.toLowerCase().includes(search.toLowerCase()) || f.brand.toLowerCase().includes(search.toLowerCase());
@@ -615,7 +615,7 @@ export default function Home() {
             <span style={{ fontSize: 10, fontWeight: 700, color: '#ccc', textTransform: 'uppercase', letterSpacing: '0.08em' }}>ประเภท</span>
             {TYPES.map(t => (
               <button key={t} onClick={() => toggleType(t)} style={{ padding: '5px 13px', borderRadius: 99, border: `1.5px solid ${filterType.includes(t) ? '#1B3A2D' : '#e5e5e5'}`, background: filterType.includes(t) ? '#1B3A2D' : 'white', color: filterType.includes(t) ? 'white' : '#555', fontSize: 12, fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s' }}>
-                {t === 'Dry' ? '🟤' : t === 'Wet' ? '💧' : t === 'Freeze-Dried' ? '❄️' : '💊'} {t}
+                {t === 'Dry' ? '🟤' : t === 'Wet' ? '💧' : t === 'Freeze-Dried' ? '❄️' : '🍖'} {t}
               </button>
             ))}
             <div style={{ width: 1, height: 18, background: '#eee', margin: '0 3px' }}/>
